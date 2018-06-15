@@ -1,6 +1,6 @@
-Making a big life change is pretty scarry.  
+**Making a big life change is pretty scarry.  
 But do you know what's even scarier?  
-Regret. 
+Regret.** 
 
 ## Book List
 
