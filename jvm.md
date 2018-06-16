@@ -28,5 +28,4 @@
     - [Java与线程](#JAVA-AND-THREAD)
 - [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
-
-<h4><a id="OMM" class="anchor" aria-hidden="true">Java内存区域与内存溢出异常</a></h4>
+### Java内存区域与内存溢出异常
