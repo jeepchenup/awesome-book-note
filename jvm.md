@@ -3,7 +3,7 @@
 
 ## 目录
 
-- [Java内存区域与内存溢出异常](#OOM "Java内存区域与内存溢出异常")
+- [Java内存区域与内存溢出异常](#OOM)
     - [运行时数据区域](#RUNTIME-AREA)
     - [HotSpot虚拟机对象](#HOTSPOT-OBJ)
     - [总结](#OOM-SUMMARY)
@@ -29,4 +29,4 @@
 - [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
 
-#### Java内存区域与内存溢出异常
+#### <a id="OMM">Java内存区域与内存溢出异常</a>
