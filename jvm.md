@@ -3,14 +3,14 @@
 
 ## 目录
 
-- [Java内存区域与内存溢出异常](#OOM)
-    - [运行时数据区域](#RUNTIME-AREA)
-    - [HotSpot虚拟机对象](#HOTSPOT-OBJ)
-    - [总结](#OOM-SUMMARY)
-- [垃圾收集器与内存分配策略](#GC-MECHINE-AND-MEMORY-ALLOCATION-STRATEGY)
-    - [概述](#GC-OVERVIEW)
-    - [引用](#REFERENCE)
-    - [垃圾收集算法](#GC-ARITHMETHIC)
+- [Java内存区域与内存溢出异常](#user-content-OOM)
+    - [运行时数据区域](#user-content-RUNTIME-AREA)
+    - [HotSpot虚拟机对象](#user-content-HOTSPOT-OBJ)
+    - [总结](#user-content-OOM-SUMMARY)
+- [垃圾收集器与内存分配策略](#user-content-GC-MECHINE-AND-MEMORY-ALLOCATION-STRATEGY)
+    - [概述](#user-content-GC-OVERVIEW)
+    - [引用](#user-content-REFERENCE)
+    - [垃圾收集算法](#user-content-GC-ARITHMETHIC)
     - [HotSpot的算法实现](#HOTSPOT)
     - [内存分配与回收策略](#MEMORY-ALLOCATION-STRATEGY)
 - [类文件结构](#CLASS-FILE-STRUCTURE)
@@ -28,4 +28,4 @@
     - [Java与线程](#JAVA-AND-THREAD)
 - [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
-### Java内存区域与内存溢出异常
+### <a id="OMM">Java内存区域与内存溢出异常</a>
