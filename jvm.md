@@ -11,22 +11,22 @@
     - [概述](#user-content-GC-OVERVIEW)
     - [引用](#user-content-REFERENCE)
     - [垃圾收集算法](#user-content-GC-ARITHMETHIC)
-    - [HotSpot的算法实现](#HOTSPOT)
-    - [内存分配与回收策略](#MEMORY-ALLOCATION-STRATEGY)
-- [类文件结构](#CLASS-FILE-STRUCTURE)
-- [虚拟机类加载机制](#CLASSLOADER)
-    - [类加载的时机](#CLASS-LOAD-TIME)
-    - [类加载的过程](#CLASS-LOAD-PROCESS)
-    - [验证](#FILE-VALIDATION)
-    - [准备](#FILE-PREPARE)
-    - [解析](#FILE-ANALYSIS)
-    - [初始化](#FILE-INIT)
-    - [类加载器](#CLASSLOADER-MECHINE)
-- [Java内存模型与线程](#MEMORY-MODEL-AND_THREAD)
-    - [物理机的内存模型](#PHYSIC-MEMORY-MODEL)
-    - [Java内存模型](#JAVA-MEMORY-MODEL)
-    - [Java与线程](#JAVA-AND-THREAD)
-- [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
+    - [HotSpot的算法实现](#user-content-HOTSPOT)
+    - [内存分配与回收策略](#user-content-MEMORY-ALLOCATION-STRATEGY)
+- [类文件结构](#user-content-CLASS-FILE-STRUCTURE)
+- [虚拟机类加载机制](#user-content-CLASSLOADER)
+    - [类加载的时机](#user-content-CLASS-LOAD-TIME)
+    - [类加载的过程](#user-content-CLASS-LOAD-PROCESS)
+    - [验证](#user-content-FILE-VALIDATION)
+    - [准备](#user-content-FILE-PREPARE)
+    - [解析](#user-content-FILE-ANALYSIS)
+    - [初始化](#user-content-FILE-INIT)
+    - [类加载器](#user-content-CLASSLOADER-MECHINE)
+- [Java内存模型与线程](#user-content-MEMORY-MODEL-AND_THREAD)
+    - [物理机的内存模型](#user-content-PHYSIC-MEMORY-MODEL)
+    - [Java内存模型](#user-content-JAVA-MEMORY-MODEL)
+    - [Java与线程](#user-content-JAVA-AND-THREAD)
+- [线程安全和锁优化](#user-content-THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
 ### <a id="OOM">Java内存区域与内存溢出异常</a>
 ![运行时数据区域](/imgs/jvm/jvm-1.png)
@@ -41,3 +41,28 @@
 2. VM Stack(Java 虚拟机栈，线程私有)，生命周期和线程相同。
     - 虚拟机栈描述的是Java方法执行的内存模型：每个方法在执行的同时都会创建出一个栈帧(Stack Frame)，用于储存局部变量表、操作数栈、动态链接、方法出栈等信息。
     - 局部变量表，存放了编译期可知的各种基本数据类型、对象引用。注意：其中64位长度的long和double类型的数据会占用2个局部变量空间(Slot)，其余的基本数据类型都只占1个。
+    - StackOverflowError（内存溢出）与OutOfMemoryError（内存泄漏）的区别:
+        1. 如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常。
+        2. 如果虚拟机栈可以动态扩展且扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。
+
+3. Native Method Stack(本地方法栈，线程私有)
+    - 与虚拟机栈之间的区别就是虚拟机栈为虚拟机执行Java方法服务，而本地方法栈则为虚拟机使用到的Native方法服务。
+    - 本地方法栈区也会抛出StackOverflowError和OutOfMemoryError异常。
+
+4. Heap(Java堆、GC堆，线程共享)
+    - Java堆是Java虚拟机所管理的内存中最大的一块，是垃圾收集器管理的主要区域。
+    - Java堆是被所有线程共享的一块内存区域。
+    - Java堆存放对象实例以及数组。
+    - 按分代收集算法来分：新生代和老年代。
+    - 划分的目的是为了更好地回收内存，或者更快地分配内存。
+
+5. Method Area(方法区，线程共享)
+    - 方法区，用于储存已被虚拟机加载的类信息、常量、静态变量、及时编译器编译后的代码等数据。
+    - Runtime Constant Pool(运行时常量池)，是方法区的一部分，所以运行时常量池自然受到方法区内存的限制，当常量池无法再申请到内存的时候，将会抛出OutOfMemoryError异常。
+    - Constant Pool Table(常量池)，用于存放编译期生成的各种字面量和符号引用。
+
+6. 直接内存
+    - 直接内存既不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。
+    - 由于频繁使用，也可能导致OutOfMemoryError异常的出现。
+
+### <a id="RUNTIME-AREA">HotSpot虚拟机对象</a>
