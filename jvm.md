@@ -29,3 +29,4 @@
 - [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
 ### <a id="OOM">Java内存区域与内存溢出异常</a>
+![运行时数据区域](/imgs/)
