@@ -29,6 +29,8 @@
 - [线程安全和锁优化](#user-content-THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
 ### <a id="OOM">Java内存区域与内存溢出异常</a>
+
+#### <a id="RUNTIME-AREA">运行时数据区域</a>
 ![运行时数据区域](/imgs/jvm/jvm-1.png)
 
 1. PC Register(Program Counter Register，线程私有)，是当前线程所执行的字节码的行号指示器。
@@ -65,4 +67,4 @@
     - 直接内存既不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。
     - 由于频繁使用，也可能导致OutOfMemoryError异常的出现。
 
-### <a id="RUNTIME-AREA">HotSpot虚拟机对象</a>
+### <a id="HOTSPOT-OBJ">HotSpot虚拟机对象</a>
