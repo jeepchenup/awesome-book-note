@@ -6,6 +6,7 @@
 同：
 - 都是接口。
 - 都在同一个包下`org.springframework.beans.factory`。
+
 异：
 - **FactoryBean**是让IoC容器中的Bean能够更加简单的生成出来。FactoryBean是一个工厂用来创建和返回指定Bean对象。
     
