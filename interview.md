@@ -1,5 +1,6 @@
 ### Spring
 - [BeanFactory与FactoryBean之间的区别？](#user-content-sp-1)
+- [Spring IoC的理解，其初始化过程？](#user-content-sp-2)
 
 #### <a id="sp-1">BeanFactory与FactoryBean之间的区别？</a>
 
@@ -148,3 +149,5 @@
 
 参考： 
 [geekAbyte](http://www.geekabyte.io/2014/11/difference-between-beanfactory-and.html)
+
+#### <a id="sp-2">Spring IoC的理解，其初始化过程？</a>
