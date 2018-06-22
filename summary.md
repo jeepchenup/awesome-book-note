@@ -178,9 +178,11 @@
 
 - Spring IoC的初始化过程？
     1.  Resource定位（Bean的定义文件定位）
+    
     2.  将Resource定位好的资源载入到BeanDefinition
     3.  将BeanDefiniton注册到容器中
 
 参考：
 -   [jinnianshilongnian](http://jinnianshilongnian.iteye.com/blog/1413846)
 -   [有爱jj](https://www.cnblogs.com/chenjunjie12321/p/6124649.html)
+-   [Spring IoC容器初始化过程](https://www.jianshu.com/p/d5f1670c3c0f)
