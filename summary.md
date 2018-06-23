@@ -1,6 +1,7 @@
 ### Spring
-- [BeanFactory与FactoryBean之间的区别？](#user-content-sp-1)
-- [Spring IoC的理解，其初始化过程？](#user-content-sp-2)
+-   [BeanFactory与FactoryBean之间的区别？](#user-content-sp-1)
+-   [Spring IoC的理解，其初始化过程？](#user-content-sp-2)
+-   [BeanFactory和ApplicationContext之间的区别？](#user-content-sp-3) 
 
 #### <a id="sp-1">BeanFactory与FactoryBean之间的区别？</a>
 
@@ -177,12 +178,24 @@
             -   注入了什么：应用程序对象所需的外部资源
 
 - Spring IoC的初始化过程？
-    1.  Resource定位（Bean的定义文件定位）
-    
-    2.  将Resource定位好的资源载入到BeanDefinition
-    3.  将BeanDefiniton注册到容器中
+    1.  Resource定位（Bean的定义文件定位）。
+    2.  BeanDefinition的载入。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
+    3.  将BeanDefinition注册到容器中。
 
 参考：
 -   [jinnianshilongnian](http://jinnianshilongnian.iteye.com/blog/1413846)
 -   [有爱jj](https://www.cnblogs.com/chenjunjie12321/p/6124649.html)
 -   [Spring IoC容器初始化过程](https://www.jianshu.com/p/d5f1670c3c0f)
+-   《Spring 技术内幕 第2版》
+
+#### <a id="sp-3">BeanFactory和ApplicationContext之间的区别？</a>
+
+首先看一下BeanFactory与ApplicationContext之间的继承关系图。  
+![](./imgs/summary/sp-3-1.png)
+
+BeanFactory是ApplicationContext的父接口。BeanFactory和ApplicationContext都可以看做是IoC容器的具体表现形式。而**BeanFactory**是IoC容器基本的功能规范，**Application**只是其中的一种IoC容器的表现形式。
+
+具体BeanFactory与ApplicationContext之间有什么区别，可以从2个方向来对比一下：   
+1.  应用场景：   
+    
+2.  设计原理：   
