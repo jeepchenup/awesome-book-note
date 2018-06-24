@@ -192,12 +192,12 @@
         从ApplicationContext的继承图可以看出，ApplicationContext不但继承了BeanFactory还继承了其他接口，比如MessageSource, ApplicationEventPublisher, ResourcePatternResolver等等。所以说ApplicationContext是一个功能更加丰富的IoC容器。
 
 2.  设计原理：   
-    -   BeanFactory(以DefaultListableBeanFactory为例)： 
+    -   BeanFactory(以DefaultListableBeanFactory为例)：     
         **DefaultListableBeanFactory**可以被看做是一个默认的功能完整的IoC容器。   
-        ![](./imgs/summary/sp-2-2.png)  
-        通过DefaultListableBeanFactory来初始化IoC容器：  
 
-        
+        ![](./imgs/summary/sp-2-2.png)  
+
+        通过DefaultListableBeanFactory来初始化IoC容器：  
         ```xml
         <?xml version="1.0" encoding="UTF-8"?>
         <beans xmlns="http://www.springframework.org/schema/beans"
