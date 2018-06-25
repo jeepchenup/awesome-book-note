@@ -282,7 +282,8 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
             -   注入了什么：应用程序对象所需的外部资源
 
 - Spring IoC的初始化过程？
-    1.  Resource定位（Bean的定义文件定位）。
+    1.  Resource定位（Bean的定义文件定位）。    
+        这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象。
     2.  BeanDefinition的载入。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
     3.  将BeanDefinition注册到容器中。
 
