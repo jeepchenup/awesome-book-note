@@ -1,7 +1,8 @@
 # Spring
 -   [BeanFactory与FactoryBean之间的区别？](#user-content-sp-1)
 -   [BeanFactory和ApplicationContext之间的区别？](#user-content-sp-2) 
--   [Spring IoC的理解，其初始化过程？](#user-content-sp-3)
+-   [Spring IoC的理解](#user-content-sp-3)
+-   [Spring IoC的初始化过程](#user-content-sp-4)
 
 # 设计模式
 -   创建型模式
@@ -256,7 +257,7 @@
 #### 总结
 BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须遵循这个规范。而ApplicationContext是IoC其中的一个具体实现并且增加了一些附属的功能，比如支持国际化的实现、可以从不同的地方获取BeanDefinition的定义信息等。对于开发而言，ApplicationContext简化了代码。但纯粹的IoC容器并不是一无是处，使用类似**DefaultListableBeanFactory**这种底层的容器，能够提高定制IoC容器的灵活性。
 
-# <a id="sp-3">Spring IoC的理解，其初始化过程？</a>
+# <a id="sp-3">Spring IoC的理解</a>
 
 - 理解Spring IoC可以从以下三个方面来看：
     1.  IoC是什么？ 
@@ -282,11 +283,13 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
             -   谁注入谁：IoC容器将应用程序所需的外部资源注入进去
             -   注入了什么：应用程序对象所需的外部资源
 
-- Spring IoC的初始化过程？
-    1.  Resource定位（Bean的定义文件定位）。    
+# <a id="sp-4">Spring IoC的初始化过程？</a>
+-   Resource定位（Bean的定义文件定位）。    
         这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象。
-    2.  BeanDefinition的载入。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
-    3.  将BeanDefinition注册到容器中。
+
+-   BeanDefinition的载入。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
+
+-   将BeanDefinition注册到容器中。
 
 参考：
 -   [jinnianshilongnian](http://jinnianshilongnian.iteye.com/blog/1413846)
