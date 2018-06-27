@@ -283,11 +283,38 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
             -   谁注入谁：IoC容器将应用程序所需的外部资源注入进去
             -   注入了什么：应用程序对象所需的外部资源
 
-# <a id="sp-4">Spring IoC的初始化过程？</a>
--   Resource定位（Bean的定义文件定位）。    
-        这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象。
+# <a id="sp-4">Spring IoC的初始化过程</a>
 
--   BeanDefinition的载入。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
+我们知道IoC容器最常用的就是ApplicationContext和BeanFactory这两个。接下来我们就以Spring4.3.14中的**org.springframework.context.support.FileSystemXmlApplicationContext**为例，来深入了解下IoC的初始化过程。
+
+-   Resource定位（Bean的定义文件定位，即BeanDefinition定位）    
+    
+    这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
+
+    看一下FileSystemXmlApplicationContext的继承关系以及其内部方法。
+    ![](./imgs/summary/sp-4-1.png)
+
+    看到FileSystemXmlApplicationContext中的 **getResourceByPath(String)** 是否心生疑惑，这个方法有什么用？什么时候会被调用？
+
+    可以先看一下，**getResourceByPath(String)**的方法调用栈。
+    ![](./imgs/summary/sp-4-2.png)
+
+    从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在 **refresh()**中开始的，这个方法就是IoC初始化的入口。
+
+    ```java
+    public FileSystemXmlApplicationContext(
+			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
+			throws BeansException {
+
+		super(parent);
+		setConfigLocations(configLocations);
+		if (refresh) {
+			refresh();
+		}
+	}
+    ```
+
+-   BeanDefinition的载入和解析。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
 
 -   将BeanDefinition注册到容器中。
 
