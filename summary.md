@@ -299,7 +299,7 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
     可以先看一下，**getResourceByPath(String)**的方法调用栈。
     ![](./imgs/summary/sp-4-2.png)
 
-    从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在 **refresh()**中开始的，这个方法就是IoC初始化的入口。
+    从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在 **refresh()** 中开始的，这个方法就是IoC初始化的入口。
 
     ```java
     public FileSystemXmlApplicationContext(
