@@ -296,7 +296,7 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
 
     看到FileSystemXmlApplicationContext中的 **getResourceByPath(String)** 是否心生疑惑，这个方法有什么用？什么时候会被调用？
 
-    可以先看一下，**getResourceByPath(String)**的方法调用栈。
+    可以先看一下，**getResourceByPath(String)** 的方法调用栈。
     ![](./imgs/summary/sp-4-2.png)
 
     从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在 **refresh()** 中开始的，这个方法就是IoC初始化的入口。
