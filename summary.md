@@ -289,17 +289,18 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
 
 -   ## Resource定位（Bean的定义文件定位，即BeanDefinition定位）    
     
-    这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
+    > 这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
 
     看一下FileSystemXmlApplicationContext的继承关系以及其内部方法。
     ![](./imgs/summary/sp-4-1.png)
 
     看到FileSystemXmlApplicationContext中的 **getResourceByPath(String)** 是否心生疑惑，这个方法有什么用？什么时候会被调用？
 
-    可以先看一下，**getResourceByPath(String)** 的方法调用栈。
+    可以先看一下，**getResourceByPath(String)** 的方法调用栈。下面就跟着这张方法调用栈来看看每个方法的实现。
+
     ![](./imgs/summary/sp-4-2.png)
 
-    从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在 **refresh()** 中开始的，这个方法就是IoC初始化的入口。
+    从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在FileSystemXmlApplicationContext的构造方法的 **refresh()** 中开始的，同时这个方法也是 **IoC初始化** 的入口。
 
     ```java
     public FileSystemXmlApplicationContext(
@@ -307,14 +308,165 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
 			throws BeansException {
 
 		super(parent);
+            //设置BeanDefinitions路径
 		setConfigLocations(configLocations);
 		if (refresh) {
-			refresh();
+		    refresh();
 		}
 	}
     ```
 
--   ## BeanDefinition的载入和解析。将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
+    ```java
+    public void setConfigLocations(@Nullable String... locations) {
+		if (locations != null) {
+			Assert.noNullElements(locations, "Config locations must not be null");
+			this.configLocations = new String[locations.length];
+			for (int i = 0; i < locations.length; i++) {
+				this.configLocations[i] = resolvePath(locations[i]).trim();
+			}
+		}
+		else {
+			this.configLocations = null;
+		}
+	}
+    ```
+
+    接下来看 **org.springframework.context.support.AbstractApplicationContext.refresh()** 方法。从上面的继承图可以看出，refresh这个方法是实现自 **org.springframework.context.ConfigurableApplicationContext** 这个接口。
+
+    ```java
+    /**
+	 * Load or refresh the persistent representation of the configuration,
+	 * which might an XML file, properties file, or relational database schema.
+	 * <p>As this is a startup method, it should destroy already created singletons
+	 * if it fails, to avoid dangling resources. In other words, after invocation
+	 * of that method, either all or no singletons at all should be instantiated.
+	 * @throws BeansException if the bean factory could not be initialized
+	 * @throws IllegalStateException if already initialized and multiple refresh
+	 * attempts are not supported
+	 */
+	void refresh() throws BeansException, IllegalStateException;
+    ```
+
+    refresh()方法详细的描述了ApplicationContext初始化的整个过程。
+
+    ```java
+    @Override
+	public void refresh() throws BeansException, IllegalStateException {
+		synchronized (this.startupShutdownMonitor) {
+			// Prepare this context for refreshing.
+			prepareRefresh();
+
+			// Tell the subclass to refresh the internal bean factory.
+			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+
+			// Prepare the bean factory for use in this context.
+			prepareBeanFactory(beanFactory);
+
+			try {
+				// Allows post-processing of the bean factory in context subclasses.
+				postProcessBeanFactory(beanFactory);
+
+				// Invoke factory processors registered as beans in the context.
+				invokeBeanFactoryPostProcessors(beanFactory);
+
+				// Register bean processors that intercept bean creation.
+				registerBeanPostProcessors(beanFactory);
+
+				// Initialize message source for this context.
+				initMessageSource();
+
+				// Initialize event multicaster for this context.
+				initApplicationEventMulticaster();
+
+				// Initialize other special beans in specific context subclasses.
+				onRefresh();
+
+				// Check for listener beans and register them.
+				registerListeners();
+
+				// Instantiate all remaining (non-lazy-init) singletons.
+				finishBeanFactoryInitialization(beanFactory);
+
+				// Last step: publish corresponding event.
+				finishRefresh();
+			}
+
+			catch (BeansException ex) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("Exception encountered during context initialization - " +
+							"cancelling refresh attempt: " + ex);
+				}
+
+				// Destroy already created singletons to avoid dangling resources.
+				destroyBeans();
+
+				// Reset 'active' flag.
+				cancelRefresh(ex);
+
+				// Propagate exception to caller.
+				throw ex;
+			}
+
+			finally {
+				// Reset common introspection caches in Spring's core, since we
+				// might not ever need metadata for singleton beans anymore...
+				resetCommonCaches();
+			}
+		}
+    ```
+
+    obtainFreshBeanFactory这个方法是告诉AbstractApplication的子类(这里是FileSystemXmlApplicationContext)刷新内部的Bean Factory。
+
+    ```java
+    protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		refreshBeanFactory();
+		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		if (logger.isDebugEnabled()) {
+			logger.debug("Bean factory for " + getDisplayName() + ": " + beanFactory);
+		}
+		return beanFactory;
+	}
+    ```
+
+    先调用了 **refreshBeanFactory()** 根据BeanDefinition的位置来刷新Bean Factory。
+
+    ### 思考：
+    为什么说这个方法会去读取BeanDefinition的位置？虽然这个方法没有参数，但是根据方法名可知，其内部实现一定会有去读取BeanDefinition位置的步骤。
+
+    继续往下看，这里refreshBeanFactory()根据继承关系调用的是 **org.springframework.context.support.AbstractRefreshableApplicationContext**中的refreshBeanFactory方法。
+
+    ```java
+    @Override
+	protected final void refreshBeanFactory() throws BeansException {
+        //先判断Bean Factory是否已经存在
+        //如果存在就销毁存在的Bean Factory
+		if (hasBeanFactory()) {
+			destroyBeans();
+			closeBeanFactory();
+		}
+		try {
+            //创建一个Bean Factory
+			DefaultListableBeanFactory beanFactory = createBeanFactory();
+			beanFactory.setSerializationId(getId());
+			customizeBeanFactory(beanFactory);
+            //加载BeanFactory
+			loadBeanDefinitions(beanFactory);
+			synchronized (this.beanFactoryMonitor) {
+				this.beanFactory = beanFactory;
+			}
+		}
+		catch (IOException ex) {
+			throw new ApplicationContextException("I/O error parsing bean definition source for " + getDisplayName(), ex);
+		}
+	}
+    ```
+
+    从 **refreshBeanFactory** 中可以获取两个信息：
+    1.  这里的BeanFactory使用的是 **DefaultListableBeanFactory** 。
+    2.  开始加载BeanDefinitions。既然要加载，必然需要先定位BeanDefinition的位置。
+
+-   ## BeanDefinition的载入和解析。
+    将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
 
 -   ## 将BeanDefinition注册到容器中。
 
