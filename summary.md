@@ -575,6 +575,52 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
 	}
     ```
 
+    这里走 **else** 分支，调用resourceLoader.getResource(location)进行获取Resource对象。
+
+    ```java
+    public Resource getResource(String location) {
+		Assert.notNull(location, "Location must not be null");
+
+		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
+			Resource resource = protocolResolver.resolve(location, this);
+			if (resource != null) {
+				return resource;
+			}
+		}
+
+		if (location.startsWith("/")) {
+			return getResourceByPath(location);
+		}
+		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
+		}
+		else {
+			try {
+				// Try to parse the location as a URL...
+				URL url = new URL(location);
+				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
+			}
+			catch (MalformedURLException ex) {
+				// No URL -> resolve as resource path.
+				return getResourceByPath(location);
+			}
+		}
+	}
+    ```
+
+    因为**FileSystemXmlApplicationContext**重写了getResourceByPath(String)这个方法，所以最后调用了重写的方法，返回了一个 **FileSystemContextResource** 对象。
+
+    ```java
+    protected Resource getResourceByPath(String path) {
+		if (path.startsWith("/")) {
+			path = path.substring(1);
+		}
+		return new FileSystemContextResource(path);
+	}
+    ```
+
+    至此，我们已经完整的了解了BeanDefinition的定位过程。
+
 -   ## BeanDefinition的载入和解析。
     将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
 
