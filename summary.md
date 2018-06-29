@@ -287,7 +287,7 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
 
 我们知道IoC容器最常用的就是ApplicationContext和BeanFactory这两个。接下来我们就以Spring4.3.14中的**org.springframework.context.support.FileSystemXmlApplicationContext**为例，来深入了解下IoC的初始化过程。
 
--   ## Resource定位（Bean的定义文件定位，即BeanDefinition定位）    
+-   ## Resource定位    
     
     > 这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
 
@@ -438,18 +438,18 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
     ```java
     @Override
 	protected final void refreshBeanFactory() throws BeansException {
-        //先判断Bean Factory是否已经存在
-        //如果存在就销毁存在的Bean Factory
+            //先判断Bean Factory是否已经存在
+            //如果存在就销毁存在的Bean Factory
 		if (hasBeanFactory()) {
 			destroyBeans();
 			closeBeanFactory();
 		}
 		try {
-            //创建一个Bean Factory
+                    //创建一个Bean Factory
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
 			customizeBeanFactory(beanFactory);
-            //加载BeanFactory
+                    //加载BeanFactory
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
@@ -462,8 +462,118 @@ BeanFactory就是一个IoC容器的规范。所有的IoC容器的实现都必须
     ```
 
     从 **refreshBeanFactory** 中可以获取两个信息：
-    1.  这里的BeanFactory使用的是 **DefaultListableBeanFactory** 。
+    1.  这里的BeanFactory使用的是 **DefaultListableBeanFactory** 。从这里也可以看出，其实 **ApplicationContext** 是封装了BeanFactory初始化的步骤。
     2.  开始加载BeanDefinitions。既然要加载，必然需要先定位BeanDefinition的位置。
+
+    这里调用的是 **org.springframework.context.support.AbstractXmlApplicationContext.loadBeanDefinitions()** 。
+
+    ```java
+    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
+		// 为给定的BeanFactory创建出一个XmlBeanDefinitionReader
+		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+
+		// 给这个BeanDifinitionReader配置加载资源
+		beanDefinitionReader.setEnvironment(this.getEnvironment());
+		beanDefinitionReader.setResourceLoader(this);
+		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
+
+		// 允许AbstractXmlApplicationContext的子类自定义reader的初始化过程
+		initBeanDefinitionReader(beanDefinitionReader);
+        // 开始加载BeanDefinition
+		loadBeanDefinitions(beanDefinitionReader);
+	}
+    ```
+
+    ```java
+    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+		Resource[] configResources = getConfigResources();
+		if (configResources != null) {
+			reader.loadBeanDefinitions(configResources);
+		}
+		String[] configLocations = getConfigLocations();
+		if (configLocations != null) {
+			reader.loadBeanDefinitions(configLocations);
+		}
+	}
+    ```    
+
+    可以看到里面提供了两个获取BeanDefinition的定位方式。
+    1.  getConfigResources()
+    2.  getConfigLocations()
+
+    根据 **getResourceByPath(String)** 的方法调用栈来看，我们会调用getConfigLocations();
+
+    ```java
+    @Nullable
+	protected String[] getConfigLocations() {
+            //在FileSystemXmlApplicationContext的构造函数中曽调用过setConfigLocations(String[])
+            //所以这里直接就是返回了当时设定的BeanDefinition的路径
+		return (this.configLocations != null ? this.configLocations : getDefaultConfigLocations());
+	}
+    ```
+
+    接着开始调用 `reader.loadBeanDefinitions(configLocations);`
+
+    ```java
+    @Override
+	public int loadBeanDefinitions(String... locations) throws BeanDefinitionStoreException {
+		Assert.notNull(locations, "Location array must not be null");
+		int counter = 0;
+		for (String location : locations) {
+			counter += loadBeanDefinitions(location);
+		}
+		return counter;
+	}
+
+    public int loadBeanDefinitions(String location) throws BeanDefinitionStoreException {
+		return loadBeanDefinitions(location, null);
+	}
+    ```
+
+    经过上面的层层调用终于到了真正加载BeanDefinition的方法 **loadBeanDefinitions(String, Set)** 。
+
+    ```java
+    public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
+		ResourceLoader resourceLoader = getResourceLoader();
+		if (resourceLoader == null) {
+			throw new BeanDefinitionStoreException(
+					"Cannot import bean definitions from location [" + location + "]: no ResourceLoader available");
+		}
+
+		if (resourceLoader instanceof ResourcePatternResolver) {
+			// Resource pattern matching available.
+			try {
+				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				int loadCount = loadBeanDefinitions(resources);
+				if (actualResources != null) {
+					for (Resource resource : resources) {
+						actualResources.add(resource);
+					}
+				}
+				if (logger.isDebugEnabled()) {
+					logger.debug("Loaded " + loadCount + " bean definitions from location pattern [" + location + "]");
+				}
+				return loadCount;
+			}
+			catch (IOException ex) {
+				throw new BeanDefinitionStoreException(
+						"Could not resolve bean definition resource pattern [" + location + "]", ex);
+			}
+		}
+		else {
+			// Can only load single resources by absolute URL.
+			Resource resource = resourceLoader.getResource(location);
+			int loadCount = loadBeanDefinitions(resource);
+			if (actualResources != null) {
+				actualResources.add(resource);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Loaded " + loadCount + " bean definitions from location [" + location + "]");
+			}
+			return loadCount;
+		}
+	}
+    ```
 
 -   ## BeanDefinition的载入和解析。
     将用户定义好的Bean表示成IoC容器内部的数据结构，这个容器内部的数据结构就是BeanDefinition。
