@@ -1,1 +1,0 @@
-[link](../../summary.md#user-content-sp-2)
