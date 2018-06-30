@@ -1,8 +1,8 @@
 # Spring
 -   [BeanFactory与FactoryBean之间的区别？](#user-content-sp-1)
--   [BeanFactory和ApplicationContext之间的区别？](./mds/summary/sp-4.md) 
+-   [BeanFactory和ApplicationContext之间的区别？](#user-content-sp-2) 
 -   [Spring IoC的理解](#user-content-sp-3)
--   [Spring IoC的初始化过程](#user-content-sp-4)
+-   [Spring IoC的初始化过程](./mds/summary/sp-4.md)
 
 # 设计模式
 -   创建型模式
