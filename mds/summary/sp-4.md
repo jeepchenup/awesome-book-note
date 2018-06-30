@@ -194,7 +194,7 @@
 
 		// 允许AbstractXmlApplicationContext的子类自定义reader的初始化过程
 		initBeanDefinitionReader(beanDefinitionReader);
-        // 开始加载BeanDefinition
+            // 开始加载BeanDefinition
 		loadBeanDefinitions(beanDefinitionReader);
 	}
     ```
@@ -446,7 +446,7 @@
 		this.readerContext = readerContext;
 		logger.debug("Loading bean definitions");
 		Element root = doc.getDocumentElement();
-        //开始进行解析并且注册BeanDefinitions
+            //开始进行解析并且注册BeanDefinitions
 		doRegisterBeanDefinitions(root);
 	}
 
@@ -571,11 +571,7 @@
 			doRegisterBeanDefinitions(ele);
 		}
 	}
-    ```
 
-    经过上面一系列的方法调用终于到了真正开始解析BeanDefinition的步骤了。
-
-    ```java
     protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
             // 开始解析
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
@@ -595,7 +591,167 @@
 	}
     ```
 
+    经过上面一系列的方法调用终于到了真正开始解析BeanDefinition的步骤了。
+
+    ```java
+    public AbstractBeanDefinition parseBeanDefinitionElement(
+			Element ele, String beanName, @Nullable BeanDefinition containingBean) {
+
+		this.parseState.push(new BeanEntry(beanName));
+
+		String className = null;
+		if (ele.hasAttribute(CLASS_ATTRIBUTE)) {
+			className = ele.getAttribute(CLASS_ATTRIBUTE).trim();
+		}
+		String parent = null;
+		if (ele.hasAttribute(PARENT_ATTRIBUTE)) {
+			parent = ele.getAttribute(PARENT_ATTRIBUTE);
+		}
+
+		try {
+			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
+
+			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
+			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
+
+			parseMetaElements(ele, bd);
+			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
+			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
+
+			parseConstructorArgElements(ele, bd);
+			parsePropertyElements(ele, bd);
+			parseQualifierElements(ele, bd);
+
+			bd.setResource(this.readerContext.getResource());
+			bd.setSource(extractSource(ele));
+
+			return bd;
+		}
+		catch (ClassNotFoundException ex) {
+			error("Bean class [" + className + "] not found", ele, ex);
+		}
+		catch (NoClassDefFoundError err) {
+			error("Class that bean class [" + className + "] depends on not found", ele, err);
+		}
+		catch (Throwable ex) {
+			error("Unexpected failure during bean definition parsing", ele, ex);
+		}
+		finally {
+			this.parseState.pop();
+		}
+
+		return null;
+	}
+    ```
+
+    可以看到上面对bean的各种属性进行解析。
+
 -   ## 将BeanDefinition注册到容器中。
+
+    **org.springframework.beans.factory.support.BeanDefinitionReaderUtils.registerBeanDefinition(BeanDefinitionHolder, BeanDefinitionRegistry)** 中开始注册
+
+    ```java
+    public static void registerBeanDefinition(
+			BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)
+			throws BeanDefinitionStoreException {
+
+		// Register bean definition under primary name.
+		String beanName = definitionHolder.getBeanName();
+		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());
+
+		// Register aliases for bean name, if any.
+		String[] aliases = definitionHolder.getAliases();
+		if (aliases != null) {
+			for (String alias : aliases) {
+				registry.registerAlias(beanName, alias);
+			}
+		}
+	}
+    ```
+
+    ```java
+    public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
+			throws BeanDefinitionStoreException {
+
+		Assert.hasText(beanName, "Bean name must not be empty");
+		Assert.notNull(beanDefinition, "BeanDefinition must not be null");
+
+		if (beanDefinition instanceof AbstractBeanDefinition) {
+			try {
+				((AbstractBeanDefinition) beanDefinition).validate();
+			}
+			catch (BeanDefinitionValidationException ex) {
+				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
+						"Validation of bean definition failed", ex);
+			}
+		}
+
+		BeanDefinition oldBeanDefinition;
+        
+            // 先判断当前这个BeanDefinition是否已经注册过
+		oldBeanDefinition = this.beanDefinitionMap.get(beanName);
+		if (oldBeanDefinition != null) {
+			if (!isAllowBeanDefinitionOverriding()) {
+				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
+						"Cannot register bean definition [" + beanDefinition + "] for bean '" + beanName +
+						"': There is already [" + oldBeanDefinition + "] bound.");
+			}
+			else if (oldBeanDefinition.getRole() < beanDefinition.getRole()) {
+				// e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE
+				if (this.logger.isWarnEnabled()) {
+					this.logger.warn("Overriding user-defined bean definition for bean '" + beanName +
+							"' with a framework-generated bean definition: replacing [" +
+							oldBeanDefinition + "] with [" + beanDefinition + "]");
+				}
+			}
+			else if (!beanDefinition.equals(oldBeanDefinition)) {
+				if (this.logger.isInfoEnabled()) {
+					this.logger.info("Overriding bean definition for bean '" + beanName +
+							"' with a different definition: replacing [" + oldBeanDefinition +
+							"] with [" + beanDefinition + "]");
+				}
+			}
+			else {
+				if (this.logger.isDebugEnabled()) {
+					this.logger.debug("Overriding bean definition for bean '" + beanName +
+							"' with an equivalent definition: replacing [" + oldBeanDefinition +
+							"] with [" + beanDefinition + "]");
+				}
+			}
+			this.beanDefinitionMap.put(beanName, beanDefinition);
+		}
+		else {
+            //检查Bean Factory创建阶段是否已经启动，例如，同时是否有任何bean被标记为以创建。
+            //如果没有启动，执行true分支；否则，执行false分支
+			if (hasBeanCreationStarted()) {
+				// Cannot modify startup-time collection elements anymore (for stable iteration)
+				synchronized (this.beanDefinitionMap) {
+					this.beanDefinitionMap.put(beanName, beanDefinition);
+					List<String> updatedDefinitions = new ArrayList<>(this.beanDefinitionNames.size() + 1);
+					updatedDefinitions.addAll(this.beanDefinitionNames);
+					updatedDefinitions.add(beanName);
+					this.beanDefinitionNames = updatedDefinitions;
+					if (this.manualSingletonNames.contains(beanName)) {
+						Set<String> updatedSingletons = new LinkedHashSet<>(this.manualSingletonNames);
+						updatedSingletons.remove(beanName);
+						this.manualSingletonNames = updatedSingletons;
+					}
+				}
+			}
+			else {
+				// Still in startup registration phase
+				this.beanDefinitionMap.put(beanName, beanDefinition);
+				this.beanDefinitionNames.add(beanName);
+				this.manualSingletonNames.remove(beanName);
+			}
+			this.frozenBeanDefinitionNames = null;
+		}
+
+		if (oldBeanDefinition != null || containsSingleton(beanName)) {
+			resetBeanDefinition(beanName);
+		}
+	}
+    ```
 
 参考：
 -   [jinnianshilongnian](http://jinnianshilongnian.iteye.com/blog/1413846)
