@@ -7,7 +7,7 @@
 # 设计模式
 -   创建型模式
     -   [简单工厂](./mds/design-model/ds-create-0.md)
-    -   [工厂方法模式](./mds/design-model/ds-create-2.md)
+    -   [工厂方法模式](./mds/design-model/ds-create-1.md)
     -   [抽象工厂模式](#user-content-ds-2)
     -   [单例模式](#user-content-ds-3)
     -   [建造者模式](#user-content-ds-4)

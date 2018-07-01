@@ -114,3 +114,5 @@ protected Resource[] getConfigResources() {
 最后看一下ClassPathXmlApplicationContext中getConfigResources的方法调用栈。
 
 ![](/imgs/summary/ds-xw-1-4.png)
+
+## [Back](../../summary.md)
