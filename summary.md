@@ -17,4 +17,5 @@
     -   [模板方法](./mds/design-model/ds-behavior-0.md)
 
 # 容器
--   ConcurrentHashMap
+-   [ConcurrentHashMap](./mds/concurrency/c-1.md)
+-   [HashMap](./mds/concurrency/c-2.md)
