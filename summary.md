@@ -13,6 +13,7 @@
     -   [建造者模式](#user-content-ds-4)
     -   [原型模式](#user-content-ds-5)
 -   结构型模式
+    -   [代理模式](/mds/design-model/ds-structure-0.md)
 -   行为型模式
     -   [模板方法](./mds/design-model/ds-behavior-0.md)
 
