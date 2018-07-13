@@ -5,6 +5,8 @@
 -   [Spring IoC的初始化过程](./mds/summary/sp-4.md)
 
 # 设计模式
+
+> 参考自：[javadoop](https://javadoop.com/post/design-pattern)
 -   创建型模式
     -   [简单工厂](./mds/design-model/ds-create-0.md)
     -   [工厂方法模式](./mds/design-model/ds-create-1.md)
