@@ -7,7 +7,7 @@
     > 这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
 
     看一下FileSystemXmlApplicationContext的继承关系以及其内部方法。
-    ![](./imgs/summary/sp-4-1.png)
+    ![](/imgs/summary/sp-4-1.png)
 
     看到FileSystemXmlApplicationContext中的 **getResourceByPath(String)** 是否心生疑惑，这个方法有什么用？什么时候会被调用？
 
