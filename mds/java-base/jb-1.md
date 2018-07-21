@@ -114,3 +114,54 @@ class Plate<T>{
 
 > 上界<? extends T>不能往里存，只能往外取
 
+`<? extends Fruit>` 会使往盘子里放东西的set( )方法失效。但取东西get( )方法还有效。比如下面例子里两个set()方法，插入Apple和Fruit都报错。
+
+```java
+Plate<? extends Fruit> p=new Plate<Apple>(new Apple());
+
+//不能存入任何元素
+p.set(new Fruit());    //Error
+p.set(new Apple());    //Error
+
+//读取出来的东西只能存放在Fruit或它的基类里。
+Fruit newFruit1=p.get();
+Object newFruit2=p.get();
+Apple newFruit3=p.get();    //Error
+```
+
+原因是编译器只知道容器内是Fruit或者它的派生类，但具体是什么类型不知道。可能是Fruit？可能是Apple？也可能是Banana，RedApple，GreenApple？编译器在看到后面用Plate<Apple>赋值以后，盘子里没有被标上有“苹果”。而是标上一个占位符：CAP#1，来表示捕获一个Fruit或Fruit的子类，具体是什么类不知道，代号CAP#1。然后无论是想往里插入Apple或者Meat或者Fruit编译器都不知道能不能和这个CAP#1匹配，所以就都不允许。
+
+所以通配符<?>和类型参数<T>的区别就在于，对编译器来说 **所有的T都代表同一种类型**。比如下面这个泛型方法里，三个T都指代同一个类型，要么都是String，要么都是Integer。
+
+```java
+public <T> List<T> fill(T... t);
+```
+
+但通配符<?>没有这种约束，Plate<?>单纯的就表示：盘子里放了一个东西，是什么我不知道。
+
+所以题主问题里的错误就在这里，Plate<？ extends Fruit>里什么都放不进去。
+
+> 下界<? super T>不影响往里存，但往外取只能放在Object对象里
+
+使用下界 `<? super Fruit>` 会使从盘子里取东西的get( )方法部分失效，只能存放到Object对象里。set( )方法正常。
+
+```java
+Plate<? super Fruit> p=new Plate<Fruit>(new Fruit());
+
+//存入元素正常
+p.set(new Fruit());
+p.set(new Apple());
+
+//读取出来的东西只能存放在Object类里。
+Apple newFruit3=p.get();    //Error
+Fruit newFruit1=p.get();    //Error
+Object newFruit2=p.get();
+```
+
+因为下界规定了元素的最小粒度的下限，实际上是放松了容器元素的类型控制。既然元素是Fruit的基类，那往里存粒度比Fruit小的都可以。但往外读取元素就费劲了，只有所有类的基类Object对象才能装下。但这样的话，元素的类型信息就全部丢失。
+
+> PECS原则
+
+最后看一下什么是PECS（Producer Extends Consumer Super）原则，已经很好理解了：
+- 频繁往外读取内容的，适合用上界Extends。
+- 经常往里插入的，适合用下界Super。
