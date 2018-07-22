@@ -118,7 +118,7 @@ static void sort(Object[] a, int lo, int hi) {
 
 #### countRunAndMakeAscending
 
-这个方法在TimSortCompare.sort方法中频繁的出现，它到底是在做什么呢？
+这个方法在ComparableTimSort.sort方法中频繁的出现，它到底是在做什么呢？
 
 ```java
 /**
@@ -166,7 +166,7 @@ private static void reverseRange(Object[] a, int lo, int hi) {
 
 **countRunAndMakeAscending** 这个方法就是做了 2 件事情：
 
-1. count RUN，顾名思义就是记录运行次数，其实也就是记录了当前数组 **compare** 到哪里的数组下标位置。
+1. count RUN，顾名思义就是记录运行次数，其实也就是记录了当前数组 **compare** 到哪里的数组下标位置，方法结束将下标位置 **返回**。
 
 2. make ascending，将数组从 lo 到 runHi 之间的所有元素，按照升序排列。
 
@@ -189,11 +189,74 @@ ComparableTimSort.sort 里面涉及了两种排序：
 
 ![](/imgs/java-base/jb-2-2.png)
 
+了解二分法插入排序原理之后，来看一下 **ComparableTimSort** 中的具体实现。
+
+```java
+/**
+ * @param a, 待排序的数组
+ * @param lo, 起始下标
+ * @param hi, 结束下标
+ * @param start, 开始a[start]以后的数组都是未排序的元素，需要通过二分法插入
+ */
+private static void binarySort(Object[] a, int lo, int hi, int start) {
+    assert lo <= start && start <= hi;
+    if (start == lo)
+        start++;
+
+    // 循环遍历a[start]以及a[start]以后的所有元素，按照二分插入的规则有序的插入数组中
+    for ( ; start < hi; start++) {
+        @SuppressWarnings("unchecked")
+        Comparable<Object> pivot = (Comparable) a[start];
+
+        // 设置有序的范围，left是有序数组开始的位置，right是有序数组结束的位置
+        int left = lo;
+        int right = start;
+        assert left <= right;
+        
+        // 这个while循环就是要找到插入点
+        while (left < right) {
+            // mid为(left+right) / 2
+            int mid = (left + right) >>> 1;
+            if (pivot.compareTo(a[mid]) < 0)
+                right = mid;
+            else
+                left = mid + 1;
+        }
+        assert left == right;
+        /*
+         * 上面找到的插入点，必然满足下面两个条件：
+         * 1. a[start] 大于等于所有在[lo, left)范围内的元素
+         * 2. a[start] 要小于所有在 [left,start)范围内的元素
+         */
+        int n = start - left;
+
+        // 进行插入操作
+        switch (n) {
+            case 2:  a[left + 2] = a[left + 1];
+            case 1:  a[left + 1] = a[left];
+                        break;
+            default: System.arraycopy(a, left, a, left + 1, n);
+        }
+        a[left] = pivot;
+    }
+}
+```
+
 ### TimSort
+
+TimSort 算法为了减少对升序部分的回溯和对降序部分的性能倒退，将输入按其升序和降序特点进行了分区。排序的输入的单位不是一个个单独的数字，而是一个个的块-分区。其中每一个分区叫一个 run 。针对这些 run 序列，每次拿一个 run 出来按规则进行合并。每次合并会将两个 run合并成一个 run。合并的结果保存到栈中。合并直到消耗掉所有的 run，这时将栈上剩余的 run合并到只剩一个 run 为止。这时这个仅剩的 run 便是排好序的结果。
+
+#### Timsort的核心过程
+
+1. 如果数组长度小于某个值，直接用二分插入排序算法
+
+2. 找到各个run，并入栈
+
+3. 按规则合并run
 
 ##   参考
 
--   [wiki - Timsort](https://en.wikipedia.org/wiki/Timsort)
+-   [Timsort原理介绍](https://blog.csdn.net/yangzhongblog/article/details/8184707)
 -   [Java经典排序算法之二分插入排序](https://blog.csdn.net/ouyang_peng/article/details/46621633)
 
 ## [Back](../../summary.md)
