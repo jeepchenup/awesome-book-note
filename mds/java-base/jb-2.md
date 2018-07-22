@@ -43,7 +43,7 @@ public static void sort(Object[] a) {
 }
 ```
 
-**LegacyMergeSort** 是Arrays的一个静态内部类，只有一个属性 `userRequested`，默认是 **false**。
+**LegacyMergeSort** 是Arrays的一个静态内部类，只有一个属性 `userRequested`，默认是 **false**，所以这里不会去介绍遗留的MergeSort。
 
 ```java
 static final class LegacyMergeSort {
@@ -116,13 +116,84 @@ static void sort(Object[] a, int lo, int hi) {
 }
 ```
 
+#### countRunAndMakeAscending
+
+这个方法在TimSortCompare.sort方法中频繁的出现，它到底是在做什么呢？
+
+```java
+/**
+ * @param a, 待排序的数组
+ * @param lo, 起始下标
+ * @param hi, 结束下标
+ */
+private static int countRunAndMakeAscending(Object[] a, int lo, int hi) {
+    assert lo < hi;
+    
+    // 下一个元素的下标
+    int runHi = lo + 1;
+    if (runHi == hi)
+        return 1;
+
+    // 下面这个判断主要是为了返回最后比较的下标位置，并且将runHi前面比较的元素以升序的方式排列起来。
+
+    // 如果是倒序，那么翻转数组
+    if (((Comparable) a[runHi++]).compareTo(a[lo]) < 0) {
+        // 倒序
+        while (runHi < hi && ((Comparable) a[runHi]).compareTo(a[runHi - 1]) < 0)
+            runHi++;
+
+        // 翻转数组
+        reverseRange(a, lo, runHi);
+    } else { // 升序
+        while (runHi < hi && ((Comparable) a[runHi]).compareTo(a[runHi - 1]) >= 0)
+            runHi++;
+    }
+
+    // 返回初始位置到最后一个被比较的元素的距离
+    return runHi - lo;
+}
+
+// 这个方法很简单，就是对指定数组内的某一块连续元素进行位置倒序。
+private static void reverseRange(Object[] a, int lo, int hi) {
+    hi--;
+    while (lo < hi) {
+        Object t = a[lo];
+        a[lo++] = a[hi];
+        a[hi--] = t;
+    }
+}
+```
+
+**countRunAndMakeAscending** 这个方法就是做了 2 件事情：
+
+1. count RUN，顾名思义就是记录运行次数，其实也就是记录了当前数组 **compare** 到哪里的数组下标位置。
+
+2. make ascending，将数组从 lo 到 runHi 之间的所有元素，按照升序排列。
+
 ComparableTimSort.sort 里面涉及了两种排序：
 
-1. binarySort，其实是一种插入排序。
+1. binarySort，其实是一种二分插入排序。
 1. TimSort，是结合了合并排序（merge sort）和插入排序（insertion sort）而得出的排序算法。
+
+### BinarySort
+
+#### 原理
+
+算法的基本过程：
+
+1. 计算 0 ~ i-1 的中间点，用 i 索引处的元素与中间值进行比较，如果 i 索引处的元素大，说明要插入的这个元素应该在中间值和刚加入i索引之间，反之，就是在刚开始的位置 到中间值的位置，这样很简单的完成了折半。
+
+1. 在相应的半个范围里面找插入的位置时，不断的用（1）步骤缩小范围，不停的折半，范围依次缩小为 1/2，1/4，1/8 .......快速的确定出第 i 个元素要插在什么地方。
+
+1. 确定位置之后，将整个序列后移，并将元素插入到相应位置。
+
+![](/imgs/java-base/jb-2-2.png)
+
+### TimSort
 
 ##   参考
 
 -   [wiki - Timsort](https://en.wikipedia.org/wiki/Timsort)
+-   [Java经典排序算法之二分插入排序](https://blog.csdn.net/ouyang_peng/article/details/46621633)
 
 ## [Back](../../summary.md)
