@@ -92,27 +92,7 @@ static void sort(Object[] a, int lo, int hi) {
     }
 
     // 当剩余的排序个数大于等于32个的时候，进行TimSort
-    ComparableTimSort ts = new ComparableTimSort(a);
-    
-    int minRun = minRunLength(nRemaining);
-    do {
-        int runLen = countRunAndMakeAscending(a, lo, hi);
-        if (runLen < minRun) {
-            int force = nRemaining <= minRun ? nRemaining : minRun;
-            binarySort(a, lo, lo + force, lo + runLen);
-            runLen = force;
-        }
-
-        ts.pushRun(lo, runLen);
-        ts.mergeCollapse();
-
-        lo += runLen;
-        nRemaining -= runLen;
-    } while (nRemaining != 0);
-
-    assert lo == hi;
-    ts.mergeForceCollapse();
-    assert ts.stackSize == 1;
+    // ... 后面分析 ...
 }
 ```
 
@@ -254,9 +234,80 @@ TimSort 算法为了减少对升序部分的回溯和对降序部分的性能倒
 
 3. 按规则合并run
 
+#### ComparableTimSort的初始化
+
+在讲 **TimSort** 之前先了解一下ComparableTimSort的初始化。
+
+```java
+private ComparableTimSort(Object[] a) {
+    this.a = a;
+
+    int len = a.length;
+    @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
+
+    // 根据待排序的数组的长度创建一个临时数组
+    // 若待排序的数组长度小于512，临时数组长度为待排序数组的1/2
+    // 否则临时数组为256
+    Object[] newArray = new Object[len < 2 * INITIAL_TMP_STORAGE_LENGTH ? 
+    len >>> 1 :
+    INITIAL_TMP_STORAGE_LENGTH];
+
+    tmp = newArray;
+    
+    int stackLen = (len <    120  ?  5 :
+                    len <   1542  ? 10 :
+                    len < 119151  ? 24 : 40);
+    runBase = new int[stackLen];
+    runLen = new int[stackLen];
+}
+```
+
+下面来看一下 **ComparableTimSort** 中的实现，下面这段是继上面 **ComparableTimSort.sort(Object[] a, int lo, int hi)** 的代码。
+
+```java
+ComparableTimSort ts = new ComparableTimSort(a);
+    
+/**
+    * 获取minRun，之后待排序数组将被分成以minRun大小为区块的若干个子数组。
+    * 1. 如果nRemaining大小为2的N次幂，则返回16（MIN_MERGE / 2）
+    * 2. 其他情况下，逐位向右位移（即除以2），直到找到介于16和32间的一个数
+    */
+int minRun = minRunLength(nRemaining);
+
+do {
+    // 在a[lo]到a[runLen-1]是按照升序排好的数组
+    int runLen = countRunAndMakeAscending(a, lo, hi);
+
+    // 如果剩余未排序的数组长度小于minRun的长度，那么就不需要归并排序，直接采用二分法插入排序即可
+    if (runLen < minRun) {
+        // nRemaining 和 minRun中取最小
+        int force = nRemaining <= minRun ? nRemaining : minRun;
+        // 二分插入排序
+        binarySort(a, lo, lo + force, lo + runLen);
+        // 更新已经被排序的元素长度
+        runLen = force;
+    }
+
+    // 记录当前已经排序的各区块的大小
+    ts.pushRun(lo, runLen);
+
+    // 进行归并插入
+    ts.mergeCollapse();
+
+    lo += runLen;
+    nRemaining -= runLen;
+} while (nRemaining != 0); // 直到所有元素被排序，结束循环
+
+assert lo == hi;
+// 若此时还有未合并的区块，就强行合并。
+ts.mergeForceCollapse();
+assert ts.stackSize == 1;
+```
+
 ##   参考
 
 -   [Timsort原理介绍](https://blog.csdn.net/yangzhongblog/article/details/8184707)
 -   [Java经典排序算法之二分插入排序](https://blog.csdn.net/ouyang_peng/article/details/46621633)
+-   [java.util.ComparableTimSort中的sort()方法简单分析](https://blog.csdn.net/bruce_6/article/details/38299199)
 
 ## [Back](../../summary.md)
