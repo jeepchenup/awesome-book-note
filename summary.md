@@ -10,6 +10,7 @@
 - ## 并发
     -   [CAS](./mds/concurrency/c-3.md)
     -   [synchronized](./mds/concurrency/c-4.md)
+    -   [AQS](./mds/concurrency/c-5.md)
 
 # 框架
 - ## Spring
