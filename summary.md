@@ -1,6 +1,6 @@
 # Java基础
 - ## 泛型
-    - [理解<? extends T>和<? super T>](./mds/java-base/jb-1.md)
+    - [理解<? extends T>和<? super T>](./mds/java-base/jb-1.md)(收藏)
 
 - ## 容器
     -   [ConcurrentHashMap](./mds/concurrency/c-1.md)
