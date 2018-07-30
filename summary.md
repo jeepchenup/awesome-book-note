@@ -11,6 +11,7 @@
     -   [CAS](./mds/concurrency/c-3.md)
     -   [synchronized](./mds/concurrency/c-4.md)
     -   [AQS](./mds/concurrency/c-5.md)
+        -   [ReentrantLock](./mds/concurrency/c-5-1.md)
 
 # 框架
 - ## Spring
