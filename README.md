@@ -1,7 +1,7 @@
 #### Book List
 
-- [JVM](./jvm.md) 正在火速更新ing...
+- [《深入理解Java虚拟机》](./jvm.md)(WIP)
 
-#### Others
+#### Notes
 
 - [SUMMARY](./summary.md)
