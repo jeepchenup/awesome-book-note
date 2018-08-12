@@ -15,6 +15,7 @@
         -   [ReadWriteLock](./mds/concurrency/c-5-2.md)
         -   [Semaphore](./mds/concurrency/c-5-3.md)
         -   [CountDownLatch](./mds/concurrency/c-5-4.md)
+        -   [CyclicBarrier](./mds/concurrency/c-5-5.md)
     -   [ThreadLocal](./md/concurrency/c-6.md)
 
 # 框架
