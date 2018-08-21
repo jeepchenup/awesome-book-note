@@ -55,4 +55,4 @@ public class Client {
 
 相比较简单工厂，工厂模式的核心就是需要在第一步选好我们需要的工厂。第二步跟简单工厂一样，通过参数来决定生产什么产品。
 
-## [Back](../../summary.md)
+##  [BACK](/mds/summary.md)

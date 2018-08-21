@@ -73,4 +73,4 @@ foodService.makeChicken();
 
 说到动态代理，又可以展开说 …… Spring 中实现动态代理有两种，一种是如果我们的类定义了接口，如 UserService 接口和 UserServiceImpl 实现，那么采用 JDK 的动态代理，感兴趣的读者可以去看看 java.lang.reflect.Proxy 类的源码；另一种是我们自己没有定义接口的，Spring 会采用 **CGLIB** 进行动态代理，它是一个 jar 包，性能还不错。
 
-## [Back](../../summary.md)
+##  [BACK](/mds/summary.md)

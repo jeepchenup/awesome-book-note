@@ -115,4 +115,4 @@ protected Resource[] getConfigResources() {
 
 ![](/imgs/summary/ds-xw-1-4.png)
 
-## [Back](../../summary.md)
+##  [BACK](/mds/summary.md)

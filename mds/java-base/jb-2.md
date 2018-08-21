@@ -310,4 +310,4 @@ assert ts.stackSize == 1;
 -   [Java经典排序算法之二分插入排序](https://blog.csdn.net/ouyang_peng/article/details/46621633)
 -   [java.util.ComparableTimSort中的sort()方法简单分析](https://blog.csdn.net/bruce_6/article/details/38299199)
 
-## [Back](../../summary.md)
+##  [BACK](/mds/summary.md)

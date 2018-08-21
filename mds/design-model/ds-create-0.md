@@ -68,4 +68,4 @@ public class Client {
 
 一个类只提供一种功能，ProductFactory的功能就是只负责创建各种Product。
 
-## [Back](../../summary.md)
+##  [BACK](/mds/summary.md)
