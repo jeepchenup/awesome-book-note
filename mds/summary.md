@@ -18,7 +18,7 @@
         -   [CyclicBarrier](/mds/concurrency/c-5-5.md)
     -   [ThreadLocal](/mds/concurrency/c-6.md)
     -   [Condition](/mds/concurrency/c-7.md)
-    -   [Fork/Join 范式](/mds/concurrency/c-8.md)(WIP)
+    -   [fork/join 框架](/mds/concurrency/c-8.md)(WIP)
 
 # 框架
 - ## Spring
