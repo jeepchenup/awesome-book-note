@@ -6,7 +6,8 @@ awsome-book-note includes reading notes and source code analysis. If you have an
 
 #### Book List
 
-- [《深入理解Java虚拟机》](/mds/jvm.md)(WIP)
+- [《深入理解Java虚拟机》](/mds/books/jvm.md)(WIP)
+- [《Spring IN ACTION FOURTH EDITION》](/mds/books/springinaction.md)(WIP)
 
 #### Notes
 
