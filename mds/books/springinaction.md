@@ -6,6 +6,7 @@
 <summary>目录</summary>
 
 -   [Chapter 1](#spring-1)
+-   [Chapter 2](#spring-2)
 
 </details>
 
@@ -20,3 +21,13 @@
 ### 总结
 
 Spring 框架关注于通过 DI、AOP 和消除样板式代码来简化企业级 Java 开发。
+
+## <a id="spring-2">Chapter 2 - 装配 Bean</a>
+
+> 本章会涉及如何声明 Bean
+
+### 3 种装配 Bean 的方式
+
+1. 在 XML 中进行显示配置
+1. 在 Java 中进行显示配置
+1. 隐式的 bean 自动装配
