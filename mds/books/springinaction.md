@@ -7,6 +7,7 @@
 
 -   [Chapter 1](#spring-1)
 -   [Chapter 2](#spring-2)
+-   [Chapter 3](#spring-3)
 
 </details>
 
@@ -72,3 +73,42 @@ bean 的三种配置：
 1. JavaConfig 显示配置，@Bean 在 @Configuration 修饰的配置类中进行声明 bean 的声明。
 
 1. XML 显示配置，bean 的声明就是在 XML 文件中通过 `<bean>` 标签来声明。
+
+## <a id="spring-3">Chapter 3 - 高级装配</a>
+
+-   本章的内容
+
+    -   [Spring profile](#spring-3-1)
+    -   条件化的 bean 声明
+    -   自动装配与歧义性
+    -   bean 的作用域
+    -   Spring 表达式语言
+
+### <a id="spring-3-1">3.1 Spring profile</a>
+
+Spring profile 就是为了简化项目迁移流程和降低迁移项目带来的人工成本。
+
+Spring 提供的 profile 将本地开发环境、测试环境以及生产环境都有效的划分开来。我们可以通过简单的配置就可以让项目在相应的环境中运行。
+
+有两种配置 profile 的方法：
+
+1.  使用 `@Profile` 注解，表明这个类是配置类，需要在指定的环境下才会激活。
+
+    ![](/imgs/springinaction/cha3-1.png)
+
+2.  在 XML 配置文件中通过设置 **&lt;beans&gt;** 中的 `profile` 属性来指定其运行的环境。
+
+    ![](/imgs/springinaction/cha3-2.png)
+
+激活某个profile 
+
+文中提供了下面几种方式：
+
+1.  作为 DispatcherServlet 的初始化参数
+1.  作为 Web 应用的上下文参数
+1.  作为 JNDI 条目
+1.  作为环境变量
+1.  作为 JVM 的系统属性
+1.  在集成测试类上，使用 @ActiveProfiles 注解设置
+
+这里图个方便，就选用最后一个方式来验证 Spring profile 的功能。
