@@ -79,8 +79,8 @@ bean 的三种配置：
 -   本章的内容
 
     -   [Spring profile](#spring-3-1)
-    -   条件化的 bean 声明
-    -   自动装配与歧义性
+    -   [条件化的 bean 声明](#spring-3-2)
+    -   [自动装配与歧义性](#spring-3-3)
     -   bean 的作用域
     -   Spring 表达式语言
 
@@ -112,3 +112,70 @@ Spring 提供的 profile 将本地开发环境、测试环境以及生产环境�
 1.  在集成测试类上，使用 @ActiveProfiles 注解设置
 
 这里图个方便，就选用最后一个方式来验证 Spring profile 的功能。
+
+### <a id="spring-3-2">3.2 条件化的 bean 声明</a>
+
+条件化的 bean 声明：顾名思义，只有在满足了一定的条件时，bean 对象才会被创建出来。
+
+#### 如何来设置条件？
+
+可以通过 `@Conditional` 注解来实现。
+
+**com.sprintinaction.conditionbean.ConditionBeanConfig.Class**
+
+```java
+@Configuration
+@PropertySource("/conditionbean.properties")
+public class ConditionBeanConfig {
+
+    @Bean
+    @Conditional(MagicExistCondition.class)
+    // Conditional 会去执行 MagicExistCondition 中的 match 方法
+    // 根据其返回的 boolean 值来确定是否创建 bean 对象
+    public MagicBean magicBean() {
+        return new MagicBean();
+    }
+}
+```
+
+这里还需要注意一点，凡是在 `@Conditional` 中添加的类都需要继承 `org.springframework.context.annotation.Condition` 这个接口。
+
+```java
+public interface Condition {
+
+	boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata);
+}
+```
+
+> 注意：书中只给了如何判断当前运行环境中是否存在 'magic' 属性，却没有告诉我们如何来模拟设置。
+
+我的做法是在 JavaConfig 中使用 `@PropertySource("/conditionbean.properties")` 来引入一个配置文件，其内容是简单的 **magic=magic**。这样测试用例就能成功通过了。
+
+### <a id="spring-3-3">3.3 自动装配与歧义性</a>
+
+作者提供给我们一个例子：
+
+```java
+@Autowired
+public void setDessert(Dessert dessert) {
+    this.dessert = dessert;
+}
+
+@Component
+public class Cake implements Dessert { ... }
+@Component
+public class Cookies implements Dessert { ... }
+@Component
+public class IceCream implements Dessert { ... }
+```
+
+像上面的情况下，Spring 是无法自动装载 bean 对象的。因为每个 bean 都是继承了 Dessert 这个接口，每个都符合，Spring 反而没有主意了。这就是自动装配可能存在的歧义性。
+
+### 如何避免出现自动装载的歧义性？
+
+书中提供了 2 种解决方案：
+
+1.  `@Primary` 或者 `<bean primary="true">`，出现相同的 bean 时，优先注入 `@Primary` 修饰的 bean。
+1.  `@Qualifier`，直接限定要注入的 bean。
+
+简单一点理解就是，`@Primary` 是让 Spring 自己选；`@Qualifier` 是你替 Spring 做了决定。
