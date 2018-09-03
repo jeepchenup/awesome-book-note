@@ -81,10 +81,12 @@ bean 的三种配置：
     -   [Spring profile](#spring-3-1)
     -   [条件化的 bean 声明](#spring-3-2)
     -   [自动装配与歧义性](#spring-3-3)
-    -   bean 的作用域
-    -   Spring 表达式语言
+    -   [bean 的作用域](#spring-3-4)
+    -   [Spring 表达式语言](#spring-3-5)
 
 ### <a id="spring-3-1">3.1 Spring profile</a>
+
+> 本章所有的代码都在 [Chapter 3](https://github.com/jeepchenup/Spring-in-Action/tree/master/Chapter3)下。
 
 Spring profile 就是为了简化项目迁移流程和降低迁移项目带来的人工成本。
 
@@ -179,3 +181,91 @@ public class IceCream implements Dessert { ... }
 1.  `@Qualifier`，直接限定要注入的 bean。
 
 简单一点理解就是，`@Primary` 是让 Spring 自己选；`@Qualifier` 是你替 Spring 做了决定。
+
+## <a id="spring-3-4">3.4 bean 的作用域</a>
+
+Spring 创建的 bean 对象默认情况下都是 **单例** 的。
+
+什么是单例？就是每次注入或者说创建出来的对象都是同一个。严格意义上面来讲，只有第一次算是创建，后面再用到这个对象的时候只是引用同一个对象而已(有兴趣的可以了解一下[单例模式](/mds/design-model/ds-structure-0.md))。
+
+Spring 定义了多种 bean 的作用域：
+
+1.  Singleton，在整个应用中，只创建 bean 的一个实例。
+
+1.  Prototype，每次注入或者通过 Spring 应用上下文获取的时候，都会创建一个新的 bean 实例。
+1.  Session，在 Web 应用中，为每个会话创建一个 bean 实例。
+1.  Request，在 Web 应用中，为每个请求创建一个 bean 实例。
+
+### 如何定义 bean 的 scope？
+
+1.  通过 `@Scope` 注解定义。
+    ```java
+    @Component
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    // @Scope("singleton") 作用一样
+    public class SingletonBean {
+        @Override
+        public boolean equals(Object obj) {
+            System.out.println(this);
+            System.out.println(obj);
+            return this == obj;
+        }
+    }
+    ```
+
+1.  通过在 XML 文件中定义 bean 的 `scope` 属性值来指定。
+    ```java
+    <bean id="prototypeBean" scope="prototype" class="com.springinaction.scope.PrototypeBean"/>
+    ```
+
+书中介绍了 Singleton, Prototype, Session 这三种使用方式。为了便于测试，这里我就使用了 Singleton 与 Prototype 这两种范围。
+
+## <a id="spring-3-5">3.5 Spring 表达式语言</a>
+
+> 这节会介绍 `org.springframework.core.env.Environment` 这个类的使用场景。
+
+了解 EL 表达式或许会更好理解。它其实就是一个占位符，在程序运行的时候将根据占位符中的 key 来查找相应的 value 当做程序需要的参数注入进去。
+
+无论是 EL 表达式还是 SpringEL 都是需要读取外部文件。
+
+### 外部注入值
+
+由于，直接赋值的方法不太好，这样做代码灵活性不够高。避免这样的做法，最简单就是通过外部注入的属性值方式。
+
+`@PropertySource`可以将指定的参数设置到 Spring 的 Environment 里面。我们可以通过 `org.springframework.core.env.Environment` 这个对象来获取其中的属性值。
+
+```java
+@Configuration
+@PropertySource("/runtimeInject.properties")
+public class RuntimeInjectConfig {
+
+    @Autowired
+    Environment environment;
+
+    @Bean
+    public Student student() {
+        return new Student(environment.getProperty("name"), environment.getProperty("phone"), environment.getProperty("number"));
+    }
+}
+```
+
+### @Value 注入
+
+```java
+public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
+    this.name = name;
+    this.sex = sex;
+}
+```
+
+### 在 XML 文件中设置
+
+```xml
+<context:property-placeholder location="runtimeInject.properties"/>
+
+<bean id="student" class="com.springinaction.runtimeInject.Student">
+    <constructor-arg index="0" value="${name}"/>
+    <constructor-arg index="1" value="${phone}"/>
+    <constructor-arg index="2" value="${number}"/>
+</bean>
+```
