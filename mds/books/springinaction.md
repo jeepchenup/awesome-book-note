@@ -269,3 +269,15 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
     <constructor-arg index="2" value="${number}"/>
 </bean>
 ```
+
+### 使用 Spring EL 进行装配
+
+`#{ <expression string> }` 其实就是通过这个表达式来获取参数。
+
+其特性如下：
+
+1.  使用 bean 的 ID 来引用 bean。
+1.  调用方法和访问对象的属性(其实就是第一条特性的衍生)。
+1.  对值进行算数、关系和逻辑运算。
+1.  正则表达式匹配。
+1.  集合操作。
