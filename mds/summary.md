@@ -26,6 +26,7 @@
     -   [BeanFactory和ApplicationContext之间的区别？](/mds/spring/sp-2.md) 
     -   [Spring IoC的理解](/mds/spring/sp-3.md)
     -   [Spring IoC的初始化过程](/mds/spring/sp-4.md)
+    -   [Spring 如何保证 Controller 并发的安全性？](/mds/spring/sp-5.md)
 
 # 设计模式
 
