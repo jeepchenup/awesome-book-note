@@ -8,6 +8,7 @@
 -   [Chapter 1](#spring-1)
 -   [Chapter 2](#spring-2)
 -   [Chapter 3](#spring-3)
+-   [Chapter 4](#spring-4)
 
 </details>
 
@@ -182,7 +183,7 @@ public class IceCream implements Dessert { ... }
 
 简单一点理解就是，`@Primary` 是让 Spring 自己选；`@Qualifier` 是你替 Spring 做了决定。
 
-## <a id="spring-3-4">3.4 bean 的作用域</a>
+### <a id="spring-3-4">3.4 bean 的作用域</a>
 
 Spring 创建的 bean 对象默认情况下都是 **单例** 的。
 
@@ -196,7 +197,7 @@ Spring 定义了多种 bean 的作用域：
 1.  Session，在 Web 应用中，为每个会话创建一个 bean 实例。
 1.  Request，在 Web 应用中，为每个请求创建一个 bean 实例。
 
-### 如何定义 bean 的 scope？
+#### 如何定义 bean 的 scope？
 
 1.  通过 `@Scope` 注解定义。
     ```java
@@ -220,7 +221,7 @@ Spring 定义了多种 bean 的作用域：
 
 书中介绍了 Singleton, Prototype, Session 这三种使用方式。为了便于测试，这里我就使用了 Singleton 与 Prototype 这两种范围。
 
-## <a id="spring-3-5">3.5 Spring 表达式语言</a>
+### <a id="spring-3-5">3.5 Spring 表达式语言</a>
 
 > 这节会介绍 `org.springframework.core.env.Environment` 这个类的使用场景。
 
@@ -228,7 +229,7 @@ Spring 定义了多种 bean 的作用域：
 
 无论是 EL 表达式还是 SpringEL 都是需要读取外部文件。
 
-### 外部注入值
+#### 外部注入值
 
 由于，直接赋值的方法不太好，这样做代码灵活性不够高。避免这样的做法，最简单就是通过外部注入的属性值方式。
 
@@ -249,7 +250,7 @@ public class RuntimeInjectConfig {
 }
 ```
 
-### @Value 注入
+#### @Value 注入
 
 ```java
 public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
@@ -258,7 +259,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 }
 ```
 
-### 在 XML 文件中设置
+#### 在 XML 文件中设置
 
 ```xml
 <context:property-placeholder location="runtimeInject.properties"/>
@@ -270,7 +271,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 </bean>
 ```
 
-### 使用 Spring EL 进行装配
+#### 使用 Spring EL 进行装配
 
 `#{ <expression string> }` 其实就是通过这个表达式来获取参数。
 
@@ -281,3 +282,40 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 1.  对值进行算数、关系和逻辑运算。
 1.  正则表达式匹配。
 1.  集合操作。
+
+## <a id="spring-4">Chapter4 - 面向切面的 Spring</a>
+
+-   本章内容
+
+    -   [Spring AOP 术语](#spring-4-1)
+    -   通过 POJO 创建切面
+    -   使用 @AspectJ 注解
+    -   为 AspectJ 切面注入依赖
+
+### <a id="spring-4-1">4.1 Spring AOP 术语</a>
+
+<img align="center" src="/imgs/springinaction/cha4-1.png"/>
+
+-   通知(Advice)
+    
+    切面的工作被称为通知。通知定义了切面是什么以及何时使用。
+
+-   连接点(Join point)
+
+    连接点是在应用执行过程中能够插入切面的一个点。这个点可以是调用方法时、抛出异常时、甚至是修改一个字段时。
+
+-   切点(Poincut)
+
+    如果说通知定义了切面的“什么”和“何时”的话，那么切点就定义了“何处”。切点的定义会匹配通知所要织入的一个或者多个连接点。
+
+-   切面(Aspect)
+
+    切面是通知和切点的结合。
+
+-   引入(Introduction)
+
+    引入允许我们向现有的类（在不修改该类的前提下）添加新的方法或者属性。
+
+-   织入(Weaving)
+
+    织入是把切面应用到目标对象并创建新的代理对象的过程。切面在指定的连接点被织入到目标对象中。

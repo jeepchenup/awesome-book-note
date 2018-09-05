@@ -27,10 +27,12 @@
     -   [Spring IoC的理解](/mds/spring/sp-3.md)
     -   [Spring IoC的初始化过程](/mds/spring/sp-4.md)
     -   [Spring 如何保证 Controller 并发的安全性？](/mds/spring/sp-5.md)
+    -   [Spring AOP 术语](https://github.com/jeepchenup/awsome-book-note/blob/master/mds/books/springinaction.md#spring-4-1)
 
 # 设计模式
 
 > 参考自：[javadoop](https://javadoop.com/post/design-pattern)
+
 -   创建型模式
     -   [简单工厂](/mds/design-model/ds-create-0.md)
     -   [工厂方法模式](/mds/design-model/ds-create-1.md)
