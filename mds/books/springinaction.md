@@ -319,3 +319,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 -   织入(Weaving)
 
     织入是把切面应用到目标对象并创建新的代理对象的过程。切面在指定的连接点被织入到目标对象中。
+
+-   Advisor
+
+    ![](/imgs/springinaction/cha4-2.png)
