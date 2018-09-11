@@ -288,9 +288,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 -   本章内容
 
     -   [Spring AOP 术语](#spring-4-1)
-    -   通过 POJO 创建切面
-    -   使用 @AspectJ 注解
-    -   为 AspectJ 切面注入依赖
+    -   [使用注解创建切面](#spring-4-2)
 
 ### <a id="spring-4-1">4.1 Spring AOP 术语</a>
 
@@ -322,4 +320,48 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 -   Advisor
 
+    Advisor 决定了如何在哪些地方使用切面以及用那些个切面，相对于 Advice 就更加具体化了。
+
     ![](/imgs/springinaction/cha4-2.png)
+
+### <a id="spring-4-2">4.2 使用注解创建切面</a>
+
+`@AspectJ` 是用来声明一个切面的，但是仅仅有了切面还是不够。因为切面是由 **通知和切点** 这两个要素组成的。
+
+### 声明通知的注解
+
+| 注解 | 通知 |
+| :-: | :-: |
+|`@After`| 通知方法会在目标方法返回或抛出异常后调用 |
+|`@AfterReturning`| 通知方法会在目标方法返回后调用 |
+|`@AfterThrowing`| 通知方法会在目标方法抛出异常后调用 |
+|`@Around`| 通知方法将在目标方法调用的前后都执行一次 |
+|`@Before`| 通知方法将在目标方法调用前执行 |
+
+这些注解都是 AspectJ 的注解，所以要使用这些注解需要引入 `aspectjweaver` 才行。
+
+### 定义切点
+
+在声明通知的时，需要同时定义切点。这个从通知注解的源码中就可以获晓。
+
+![](/imgs/springinaction/cha4-3.png "@Around 源码")
+
+| AspectJ 指示器 | 描述 |
+|:-:|:-:|
+| arg() | **限制** 连接点匹配参数为指定 **类型的执行方法** |
+| @args() | **限制** 连接点匹配参数由指定 **注解标注的执行方法** |
+| execution() | 用于匹配是连接点的执行方法（里面的表达式就是连接点的执行方法的正则表达式） |
+| this() | **限制** 连接点匹配AOP代理的bean引用为指定类型的类 |
+| target | **限制** 连接点匹配目标对象为指定类型的类 |
+| @target() | **限制** 连接点匹配特定的执行对象，这些对象对应的类要具有指定类型的注解 |
+| within() | **限制** 连接点匹配指定的类型 |
+| @within() | **限制** 连接点匹配指定注解所标注的类型（当使用Spring AOP时，方法定义在由指定的注解所标
+注的类里） |
+| @annotation | **限定** 匹配带有指定注解的连接点 |
+
+> 注意：只有execution指示器是实际执
+行匹配的，而其他的指示器都是用来限制匹配的。
+
+下面是代码介绍：
+
+![](/imgs/springinaction/cha4-4.png)
