@@ -329,7 +329,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 `@AspectJ` 是用来声明一个切面的，但是仅仅有了切面还是不够。因为切面是由 **通知和切点** 这两个要素组成的。
 
-### 声明通知的注解
+### 4.2.1 声明通知的注解
 
 | 注解 | 通知 |
 | :-: | :-: |
@@ -341,7 +341,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 这些注解都是 AspectJ 的注解，所以要使用这些注解需要引入 `aspectjweaver` 才行。
 
-### 定义切点
+### 4.2.2 定义切点
 
 在声明通知的时，需要同时定义切点。这个从通知注解的源码中就可以获晓。
 
@@ -371,8 +371,22 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 测试用例在 `annotation.concert` 包下面。
 
-### 处理通知中的参数
+### 4.2.3 处理通知中的参数
 
 ![](/imgs/springinaction/cha4-5.png)
 
 这些圈出来的部分，类型必须一致，参数名称也必须一致。
+
+### 4.2.4 通过注解引入新功能
+
+前面我们提到的都是针对于对象的方法增强，一定看清楚，是对象的方法增强。
+
+引入的概念就是在不改变对象原来结构的前提下，增加对象的方法。
+
+下图展示了其如何工作：
+
+![](/imgs/springinaction/cha4-6.png)
+
+关键点是使用注解 `@DeclareParents`。
+
+### <a id="spring-4-1">4.3 使用 xml 创建切面</a>
