@@ -289,6 +289,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
     -   [Spring AOP 术语](#spring-4-1)
     -   [使用注解创建切面](#spring-4-2)
+    -   [使用 xml 创建切面](#spring-4-3)
 
 ### <a id="spring-4-1">4.1 Spring AOP 术语</a>
 
@@ -335,7 +336,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 |`@After`| 通知方法会在目标方法返回或抛出异常后调用 |
 |`@AfterReturning`| 通知方法会在目标方法返回后调用 |
 |`@AfterThrowing`| 通知方法会在目标方法抛出异常后调用 |
-|`@Around`| 通知方法将在目标方法调用的前后都执行一次 |
+|`@Around`| 通知方法会将目标方法封装起来 |
 |`@Before`| 通知方法将在目标方法调用前执行 |
 
 这些注解都是 AspectJ 的注解，所以要使用这些注解需要引入 `aspectjweaver` 才行。
@@ -365,3 +366,13 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 下面是代码介绍：
 
 ![](/imgs/springinaction/cha4-4.png)
+
+此时的 Audience 还算不上是真正的切面，只能说他具有切面一切应该有的功能，但是最终还是需要 Spring 的容器来生产管理才行，这个时候才是真正的切面。
+
+测试用例在 `annotation.concert` 包下面。
+
+### 处理通知中的参数
+
+![](/imgs/springinaction/cha4-5.png)
+
+这些圈出来的部分，类型必须一致，参数名称也必须一致。
