@@ -290,6 +290,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
     -   [Spring AOP 术语](#spring-4-1)
     -   [使用注解创建切面](#spring-4-2)
     -   [使用 xml 创建切面](#spring-4-3)
+    -   [注入 AspectJ 切面](#spring-4-4)
 
 ### <a id="spring-4-1">4.1 Spring AOP 术语</a>
 
@@ -390,3 +391,11 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 关键点是使用注解 `@DeclareParents`。
 
 ### <a id="spring-4-1">4.3 使用 xml 创建切面</a>
+
+没有什么坑的地方，跟着书上的内容敲就行了。切面的声明都在 [concert-xml-beans.xml](https://github.com/jeepchenup/Spring-in-Action/blob/master/Chapter4/src/main/resources/concert-xml-beans.xml) 中。
+
+### <a id="spring-4-4">4.4 注入 AspectJ 切面</a>
+
+![](/imgs/springinaction/cha4-7.png)
+
+唯一要注意的地方就是将项目默认编译选择为 **Ajc**，这样 AspectJ 才能够在编译期织入目标类。
