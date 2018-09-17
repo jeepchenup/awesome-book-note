@@ -47,4 +47,4 @@
     -   [模板方法](../mds/design-model/ds-behavior-0.md)
 
 
-<h2 align="center"><a id="backToHome" href="/">Back to Home</a></h2>
+<h2 align="center"><a id="backToHome" href="/awsome-book-note">Back to Home</a></h2>
