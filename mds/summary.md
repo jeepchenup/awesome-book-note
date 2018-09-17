@@ -49,12 +49,11 @@
 
 <h2 align="center"><a id="backToHome">Back to Home</a></h2>
 
-<script type="text/javascript">
+
+<script type="text/javascript"\>
 
 if(window.location.host == "jeepchenup.github.io") {
     document.getElementById("backToHome").setAttribute("href", "/awsome-book-note");
 } else if(window.location.host == "github.com") {
     document.getElementById("backToHome").setAttribute("href", "/jeepchenup/awsome-book-note");
-}
-
-</script>
+}</script\>
