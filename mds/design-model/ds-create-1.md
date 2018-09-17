@@ -10,7 +10,7 @@
 
 下图中，Factory 有一个 doSomethind() 方法，这个方法需要用到一个产品对象，这个产品对象由 factoryMethod() 方法创建。该方法是抽象的，需要由子类去实现。
 
-![](/imgs/summary/ds-1.png)  
+![](../../imgs/summary/ds-1.png)  
 
 ### 工厂方法的实现
 
@@ -55,4 +55,4 @@ public class Client {
 
 相比较简单工厂，工厂模式的核心就是需要在第一步选好我们需要的工厂。第二步跟简单工厂一样，通过参数来决定生产什么产品。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

@@ -152,4 +152,4 @@
 参考： 
 [geekAbyte](http://www.geekabyte.io/2014/11/difference-between-beanfactory-and.html)
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

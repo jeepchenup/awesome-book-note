@@ -692,4 +692,4 @@ C表示类。
 
 ContextClassLoader：有些时候ClassLoader的双亲委托机制不能完成一些特定的类加载任务，比如java提供一些SPI，由厂商来进行具体的实现，比如jdbc，各个数据库厂商根据java提供的SPI来实现各自数据库的连接；这些SPI都定义在核心类里，由bootstrap ClassLoader加载，而在SPI 接口中的代码经常需要加载具体的实现类，但厂商的具体实现又不能由Bootstrap ClassLoader加载，这个时候就需要ContextClassLoader。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

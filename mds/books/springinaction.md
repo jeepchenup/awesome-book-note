@@ -5,13 +5,21 @@
 <details>
 <summary>目录</summary>
 
--   Spring 核心
-    -   [Chapter 1](#spring-1)
-    -   [Chapter 2](#spring-2)
-    -   [Chapter 3](#spring-3)
-    -   [Chapter 4](#spring-4)
--   Web 中的 Spring
-    -   [Chapter 5](#spring-5)
+<ul>
+    <li>Spring 核心
+        <ul>
+            <li><a href="#spring-1">Chapter 1</a></li>
+            <li><a href="#spring-2">Chapter 2</a></li>
+            <li><a href="#spring-3">Chapter 3</a></li>
+            <li><a href="#spring-4">Chapter 4</a></li>
+        </ul>
+    </li>
+    <li>Web 中的 Spring
+        <ul>
+            <li><a href="#spring-5">Chapter 5</a></li>
+        </ul>
+    </li>
+</ul>
 
 </details>
 
@@ -408,3 +416,5 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 这章主要就是通过 annotation 来快速的搭建 Spring MVC。这里server 我选用 tomcat。
 
 同时，书中选用了测试 Spring MVC 的框架 - [mockito](https://site.mockito.org/)
+
+##  [BACK](../../mds/summary.md)

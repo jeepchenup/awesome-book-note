@@ -7,13 +7,13 @@
     > 这个阶段的目的就是对**BeanDefinition**资源的path进行解析，然后生成一个**org.springframework.core.io.Resource**对象供后面载入和解析。
 
     看一下FileSystemXmlApplicationContext的继承关系以及其内部方法。
-    ![](/imgs/summary/sp-4-1.png)
+    ![](../../imgs/summary/sp-4-1.png)
 
     看到FileSystemXmlApplicationContext中的 **getResourceByPath(String)** 是否心生疑惑，这个方法有什么用？什么时候会被调用？
 
     可以先看一下，**getResourceByPath(String)** 的方法调用栈。下面就跟着这张方法调用栈来看看每个方法的实现。
 
-    ![](../../imgs/summary/sp-4-2.png)
+    ![](../..../../imgs/summary/sp-4-2.png)
 
     从上述的方法调用栈可以看出，**getResourceByPath(String)** 最开始是在FileSystemXmlApplicationContext的构造方法的 **refresh()** 中开始的，同时这个方法也是 **IoC初始化** 的入口。
 
@@ -759,4 +759,4 @@
 -   [Spring IoC容器初始化过程](https://www.jianshu.com/p/d5f1670c3c0f)
 -   《Spring 技术内幕 第2版》
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)
