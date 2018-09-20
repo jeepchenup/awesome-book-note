@@ -83,7 +83,7 @@ class GreenApple extends Apple{}
 
 在这个体系中，上界通配符 “Plate<？ extends Fruit>” 覆盖下图中蓝色的区域。
 
-![](/imgs/java-base/jb-1-1.png)
+![](../../imgs/java-base/jb-1-1.png)
 
 > 什么是下界？
 
@@ -95,7 +95,7 @@ Plate<？ super Fruit>
 
 表达的就是相反的概念：**一个能放水果以及一切是水果基类的盘子** 。`Plate<？ super Fruit>` 是 `Plate<Fruit>` 的基类，但不是 `Plate<Apple>` 的基类。对应刚才那个例子，`Plate<？ super Fruit>` 覆盖下图中红色的区域。
 
-![](/imgs/java-base/jb-1-2.png)
+![](../../imgs/java-base/jb-1-2.png)
 
 > 上下界通配符的副作用
 
@@ -166,4 +166,4 @@ Object newFruit2=p.get();
 - 频繁往外读取内容的，适合用上界Extends。
 - 经常往里插入的，适合用下界Super。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

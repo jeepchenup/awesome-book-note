@@ -6,7 +6,7 @@
 
 ### 类图
 
-![](/imgs/summary/ds-s-0-1.png)
+![](../../imgs/summary/ds-s-0-1.png)
 
 既然说是代理，那就要对客户端隐藏真实实现，由代理来负责客户端的所有请求。当然，代理只是个代理，它不会完成实际的业务逻辑，而是一层皮而已，但是对于客户端来说，它必须表现得就是客户端需要的真实实现。
 
@@ -73,4 +73,4 @@ foodService.makeChicken();
 
 说到动态代理，又可以展开说 …… Spring 中实现动态代理有两种，一种是如果我们的类定义了接口，如 UserService 接口和 UserServiceImpl 实现，那么采用 JDK 的动态代理，感兴趣的读者可以去看看 java.lang.reflect.Proxy 类的源码；另一种是我们自己没有定义接口的，Spring 会采用 **CGLIB** 进行动态代理，它是一个 jar 包，性能还不错。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

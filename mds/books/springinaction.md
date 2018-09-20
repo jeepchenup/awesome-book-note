@@ -5,10 +5,21 @@
 <details>
 <summary>目录</summary>
 
--   [Chapter 1](#spring-1)
--   [Chapter 2](#spring-2)
--   [Chapter 3](#spring-3)
--   [Chapter 4](#spring-4)
+<ul>
+    <li>Spring 核心
+        <ul>
+            <li><a href="#spring-1">Chapter 1</a></li>
+            <li><a href="#spring-2">Chapter 2</a></li>
+            <li><a href="#spring-3">Chapter 3</a></li>
+            <li><a href="#spring-4">Chapter 4</a></li>
+        </ul>
+    </li>
+    <li>Web 中的 Spring
+        <ul>
+            <li><a href="#spring-5">Chapter 5</a></li>
+        </ul>
+    </li>
+</ul>
 
 </details>
 
@@ -34,16 +45,16 @@ Spring 框架关注于通过 DI、AOP 和消除样板式代码来简化企业级
 
 -   隐式的声明，通过 `@Component` 注解让 Spring 自动发现。这个简单的注解表明该类会作为组件类，并告知 Spring 要为这个类创建 bean。
 
-    ![](/imgs/springinaction/cha2-2.png '只能用来修饰class')
+    ![](../../imgs/springinaction/cha2-2.png '只能用来修饰class')
     > 由于组件扫描默认是不启动的，需要手动启动。
 
     1.  可以通过 @ComponentScan 注解来开启扫描。
 
-        ![](/imgs/springinaction/cha2-3.png)
+        ![](../../imgs/springinaction/cha2-3.png)
 
     1.  可以通过 XML 配置文件来开启扫描。
 
-        ![](/imgs/springinaction/cha2-4.png)
+        ![](../../imgs/springinaction/cha2-4.png)
 
     这两种方式也是 Spring 中最常用的方式。
 
@@ -51,17 +62,17 @@ Spring 框架关注于通过 DI、AOP 和消除样板式代码来简化企业级
 
     @Bean 注解会告诉 Spring 注释的 **方法** 将会返回一个对象，该对象要注册为 Spring 应用上下文中的 bean。
 
-    ![](/imgs/springinaction/cha2-5.png)
+    ![](../../imgs/springinaction/cha2-5.png)
 
 -   在 xml 文件中，通过 `<bean>` 标签来声明 bean。
 
-    ![](/imgs/springinaction/cha2-6.png)
+    ![](../../imgs/springinaction/cha2-6.png)
 
 ### 2. Bean 装配方式
     
 通过 @Autowired 注释来实现。`@Autowired` 可以将声明的 bean 注入，无论是上述那种方式声明出来 bean 都可以注入。
 
-![](/imgs/springinaction/cha2-1.png)
+![](../../imgs/springinaction/cha2-1.png)
 
 > 隐式装配 bean是最为推荐的方式。但是有时候，比不可免的要使用 xml 或 JavaConfig 的方式来进行配置 bean。因为比如，你想要将 **第三方库** 中的组件装配到你的应用中，这个时候隐式的装配就不行了。
 
@@ -97,11 +108,11 @@ Spring 提供的 profile 将本地开发环境、测试环境以及生产环境�
 
 1.  使用 `@Profile` 注解，表明这个类是配置类，需要在指定的环境下才会激活。
 
-    ![](/imgs/springinaction/cha3-1.png)
+    ![](../../imgs/springinaction/cha3-1.png)
 
 2.  在 XML 配置文件中通过设置 **&lt;beans&gt;** 中的 `profile` 属性来指定其运行的环境。
 
-    ![](/imgs/springinaction/cha3-2.png)
+    ![](../../imgs/springinaction/cha3-2.png)
 
 激活某个profile 
 
@@ -187,7 +198,7 @@ public class IceCream implements Dessert { ... }
 
 Spring 创建的 bean 对象默认情况下都是 **单例** 的。
 
-什么是单例？就是每次注入或者说创建出来的对象都是同一个。严格意义上面来讲，只有第一次算是创建，后面再用到这个对象的时候只是引用同一个对象而已(有兴趣的可以了解一下[单例模式](/mds/design-model/ds-structure-0.md))。
+什么是单例？就是每次注入或者说创建出来的对象都是同一个。严格意义上面来讲，只有第一次算是创建，后面再用到这个对象的时候只是引用同一个对象而已(有兴趣的可以了解一下[单例模式](../../mds/design-model/ds-structure-0.md))。
 
 Spring 定义了多种 bean 的作用域：
 
@@ -294,7 +305,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 ### <a id="spring-4-1">4.1 Spring AOP 术语</a>
 
-<img align="center" src="/imgs/springinaction/cha4-1.png"/>
+<img align="center" src="../../imgs/springinaction/cha4-1.png"/>
 
 -   通知(Advice)
     
@@ -324,7 +335,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
     Advisor 决定了如何在哪些地方使用切面以及用那些个切面，相对于 Advice 就更加具体化了。
 
-    ![](/imgs/springinaction/cha4-2.png)
+    ![](../../imgs/springinaction/cha4-2.png)
 
 ### <a id="spring-4-2">4.2 使用注解创建切面</a>
 
@@ -346,7 +357,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 在声明通知的时，需要同时定义切点。这个从通知注解的源码中就可以获晓。
 
-![](/imgs/springinaction/cha4-3.png "@Around 源码")
+![](../../imgs/springinaction/cha4-3.png "@Around 源码")
 
 | AspectJ 指示器 | 描述 |
 |:-:|:-:|
@@ -366,7 +377,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 下面是代码介绍：
 
-![](/imgs/springinaction/cha4-4.png)
+![](../../imgs/springinaction/cha4-4.png)
 
 此时的 Audience 还算不上是真正的切面，只能说他具有切面一切应该有的功能，但是最终还是需要 Spring 的容器来生产管理才行，这个时候才是真正的切面。
 
@@ -374,7 +385,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 ### 4.2.3 处理通知中的参数
 
-![](/imgs/springinaction/cha4-5.png)
+![](../../imgs/springinaction/cha4-5.png)
 
 这些圈出来的部分，类型必须一致，参数名称也必须一致。
 
@@ -386,7 +397,7 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 下图展示了其如何工作：
 
-![](/imgs/springinaction/cha4-6.png)
+![](../../imgs/springinaction/cha4-6.png)
 
 关键点是使用注解 `@DeclareParents`。
 
@@ -396,6 +407,14 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 ### <a id="spring-4-4">4.4 注入 AspectJ 切面</a>
 
-![](/imgs/springinaction/cha4-7.png)
+![](../../imgs/springinaction/cha4-7.png)
 
 唯一要注意的地方就是将项目默认编译选择为 **Ajc**，这样 AspectJ 才能够在编译期织入目标类。
+
+## <a id="spring-5">5. Sprig MVC 起步</a>
+
+这章主要就是通过 annotation 来快速的搭建 Spring MVC。这里server 我选用 tomcat。
+
+同时，书中选用了测试 Spring MVC 的框架 - [mockito](https://site.mockito.org/)
+
+##  [BACK](../../mds/summary.md)

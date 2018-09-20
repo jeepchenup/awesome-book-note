@@ -6,7 +6,7 @@
 
 这是sort(List<T>)的方法调用栈。
 
-![](/imgs/java-base/jb-2-1.png)
+![](../../imgs/java-base/jb-2-1.png)
 
 ```java
 public static <T extends Comparable<? super T>> void sort(List<T> list) {
@@ -167,7 +167,7 @@ ComparableTimSort.sort 里面涉及了两种排序：
 
 1. 确定位置之后，将整个序列后移，并将元素插入到相应位置。
 
-![](/imgs/java-base/jb-2-2.png)
+![](../../imgs/java-base/jb-2-2.png)
 
 了解二分法插入排序原理之后，来看一下 **ComparableTimSort** 中的具体实现。
 
@@ -310,4 +310,4 @@ assert ts.stackSize == 1;
 -   [Java经典排序算法之二分插入排序](https://blog.csdn.net/ouyang_peng/article/details/46621633)
 -   [java.util.ComparableTimSort中的sort()方法简单分析](https://blog.csdn.net/bruce_6/article/details/38299199)
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

@@ -27,6 +27,6 @@
 
     了解过 bean 的作用范围，答案就已经出来了，就是设置 Controller 的作用范围为 `Prototype` 就可以了。
 
-2.  ThreadLocal 变量来隔绝共享参数的出现。不熟悉 ThreadLocal 可以来一下这篇文章 -> [ThreadLocal](/mds/concurrency/c-6.md)。
+2.  ThreadLocal 变量来隔绝共享参数的出现。不熟悉 ThreadLocal 可以来一下这篇文章 -> [ThreadLocal](../../mds/concurrency/c-6.md)。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

@@ -1,36 +1,36 @@
 # Book
-![](/imgs/jvm/jvm-book.jpg "《深入理解Java虚拟机 第2版》")
+![](../../imgs/jvm/jvm-book.jpg "《深入理解Java虚拟机 第2版》")
 
 ## 目录
 
-- [Java内存区域与内存溢出异常](#user-content-OOM)
-    - [运行时数据区域](#user-content-RUNTIME-AREA)
-    - [HotSpot虚拟机对象](#user-content-HOTSPOT-OBJ)
-    - [总结](#user-content-OOM-SUMMARY)
-- [垃圾收集器与内存分配策略](#user-content-GC-MECHINE-AND-MEMORY-ALLOCATION-STRATEGY)
-    - [概述](#user-content-GC-OVERVIEW)
-    - [引用](#user-content-REFERENCE)
-    - [垃圾收集算法](#user-content-GC-ARITHMETHIC)
-    - [HotSpot的算法实现](#user-content-HOTSPOT)
-    - [垃圾收集器](#user-content-GC)
-    - [内存分配与回收策略](#user-content-MEMORY-ALLOCATION-STRATEGY)
-- [类文件结构](#user-content-CLASS-FILE-STRUCTURE)
-- [虚拟机类加载机制](#user-content-CLASSLOADER)
-    - [类加载的时机](#user-content-CLASS-LOAD-TIME)
-    - [类加载的过程](#user-content-CLASS-LOAD-PROCESS)
-    - [验证](#user-content-FILE-VALIDATION)
-    - [准备](#user-content-FILE-PREPARE)
-    - [解析](#user-content-FILE-ANALYSIS)
-    - [初始化](#user-content-FILE-INIT)
-    - [类加载器](#user-content-CLASSLOADER-MECHINE)
-- [Java内存模型与线程](#user-content-MEMORY-MODEL-AND_THREAD)
-    - [物理机的内存模型](#user-content-PHYSIC-MEMORY-MODEL)
-    - [Java内存模型](#user-content-JAVA-MEMORY-MODEL)
-    - [Java与线程](#user-content-JAVA-AND-THREAD)
-- [线程安全和锁优化](#user-content-THREAD-SECURITY-AND-LOCK-OPTIMIZE)
+- [Java内存区域与内存溢出异常](#OOM)
+    - [运行时数据区域](#RUNTIME-AREA)
+    - [HotSpot虚拟机对象](#HOTSPOT-OBJ)
+    - [总结](#OOM-SUMMARY)
+- [垃圾收集器与内存分配策略](#GC-MECHINE-AND-MEMORY-ALLOCATION-STRATEGY)
+    - [概述](#GC-OVERVIEW)
+    - [引用](#REFERENCE)
+    - [垃圾收集算法](#GC-ARITHMETHIC)
+    - [HotSpot的算法实现](#HOTSPOT)
+    - [垃圾收集器](#GC)
+    - [内存分配与回收策略](#MEMORY-ALLOCATION-STRATEGY)
+- [类文件结构](#CLASS-FILE-STRUCTURE)
+- [虚拟机类加载机制](#CLASSLOADER)
+    - [类加载的时机](#CLASS-LOAD-TIME)
+    - [类加载的过程](#CLASS-LOAD-PROCESS)
+    - [验证](#FILE-VALIDATION)
+    - [准备](#FILE-PREPARE)
+    - [解析](#FILE-ANALYSIS)
+    - [初始化](#FILE-INIT)
+    - [类加载器](#CLASSLOADER-MECHINE)
+- [Java内存模型与线程](#MEMORY-MODEL-AND_THREAD)
+    - [物理机的内存模型](#PHYSIC-MEMORY-MODEL)
+    - [Java内存模型](#JAVA-MEMORY-MODEL)
+    - [Java与线程](#JAVA-AND-THREAD)
+- [线程安全和锁优化](#THREAD-SECURITY-AND-LOCK-OPTIMIZE)
 
 # <a id="RUNTIME-AREA">运行时数据区域</a>
-![运行时数据区域](/imgs/jvm/jvm-1.png)
+![运行时数据区域](../../imgs/jvm/jvm-1.png)
 
 ### PC Register(Program Counter Register，线程私有)，是当前线程所执行的字节码的行号指示器。
 - 此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。（这是一个固定的整数的储存空间，所以没有规定OOM）字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。
@@ -91,9 +91,9 @@
 ### 对象的访问定位
 - 主流的访问方式：句柄、直接指针。
     - **句柄**，Java堆中将会划分出一块内存作为句柄池，reference中储存的就是对象的句柄地址，而句柄中包含了类信息。
-    ![句柄模型](/imgs/jvm/jvm-2.png)
+    ![句柄模型](../../imgs/jvm/jvm-2.png)
     - **直接指针**
-    ![直接指针模型](/imgs/jvm/jvm-3.png)
+    ![直接指针模型](../../imgs/jvm/jvm-3.png)
 - 句柄与直接指针的优缺点:
     - 句柄：reference中储存的是稳定的句柄地址，在对象被移动时只会改变句柄中的实例数据指针，而reference本身不需要修改。
     - 直接指针：速度更快，它节省了一次指针定位的时间开销，由于对象的访问在Java中非常频繁，因此这类开销积少成多也是一项非常可观的执行成本(HotSport是使用直接指针进行对象访问的)。
@@ -148,13 +148,13 @@
 ###  标记-清除算法(Mark-Sweep)  
 “标记-清除”算法，分为标记和清除两个阶段。
 -   标记阶段，遍历所有GC Roots可达的对象标记为存活的对象。
-    ![标记阶段](/imgs/jvm/jvm-4.jpg)
+    ![标记阶段](../../imgs/jvm/jvm-4.jpg)
 -   清除阶段：遍历堆中所有的对象，将没有标记的对象全部清除掉。
-    ![清除阶段](/imgs/jvm/jvm-5.jpg)
+    ![清除阶段](../../imgs/jvm/jvm-5.jpg)
 -   缺点：
     1.  效率问题。标记和清除两个过程的效率都不高。
     2.	空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。
-![“标记-清除”算法](/imgs/jvm/jvm-6.png)
+![“标记-清除”算法](../../imgs/jvm/jvm-6.png)
 
 ###  复制算法(Copying)  
 将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这块的内存用完了，就将还存活着的对象复制到另外一块内存上面，然后再把已使用过的内存空间一次清理掉。
@@ -163,12 +163,12 @@
 -	缺点：
     1.  内存缩小为原来的一半。
     2.  在对象存活率较高时，就要进行较多的复制操作，效率将会变低。
-![复制算法](/imgs/jvm/jvm-7.png)
+![复制算法](../../imgs/jvm/jvm-7.png)
 
 ###  标记-整理算法(Mark-Compact)  
 标记过程与“标记-清除”算法一样，接着让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。
 -	优点：适用于老年代。内存空间利用率相比较复制算法要高
-![标记-整理算法](/imgs/jvm/jvm-8.png)
+![标记-整理算法](../../imgs/jvm/jvm-8.png)
 
 ###  分代收集算法  
 一般把Java堆分为新生代和老年代，这样就可以根据各个年代的特点采用最适当的收集算法。
@@ -204,7 +204,7 @@ HotSpot没有为每条指令都生成OopMap，只在安全点(Safepoint)停顿�
 > 	并行(Parallel)：指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态。
 >	并发(Concurrent)：指用户线程与垃圾收集线程同时执行(但并不一定是并行的，可能会交替执行)，用户程序在继续运行，而垃圾收集程序运行于另一个CPU上。
 
-![垃圾收集器](/imgs/jvm/jvm-9.png)
+![垃圾收集器](../../imgs/jvm/jvm-9.png)
 
 ##  Serial收集器
 Serial收集器是最基本，发展历史最悠久的收集器。  
@@ -215,13 +215,13 @@ Serial收集器是最基本，发展历史最悠久的收集器。
 应用场景：  
 1.	可用于收集内存不大（几十兆到一两百兆）的新生代，可以在较短时间内完成收集，只要不频繁发生，都是可以接受的。
 2.	对于运行在Client模式下的虚拟机来说是一个很好的选择。  
-![Serial收集器](/imgs/jvm/jvm-10.png)
+![Serial收集器](../../imgs/jvm/jvm-10.png)
 
 ##  ParNew收集器
 ParNew收集器其实就是Serial收集器的多线程版本。除了使用多条线程进行垃圾收集之外，其余行为与Serial收集器完全一样。  
 特点：多线程  
 应用场景：适用于Server模式下的虚拟机中首选的新生代收集器。  
-![ParNew收集器](/imgs/jvm/jvm-11.png)
+![ParNew收集器](../../imgs/jvm/jvm-11.png)
 
 ## Parallel Scavenge收集器
 **吞吐量 = 运行用户代码时间/(运行用户代码时间 + 垃圾收集时间)**  
@@ -258,7 +258,7 @@ Parallel Scavenge收集器是一个并行的多线程、新生代收集器。
 
 在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scanvenge + Parallel Old收集器
 
-![ParNew收集器](/imgs/jvm/jvm-12.png)
+![ParNew收集器](../../imgs/jvm/jvm-12.png)
 
 ## CMS收集器
 CMS(Concurrent Mark Sweep)收集器是一种以获取最短回收停顿时间为目标的收集器。
@@ -287,7 +287,7 @@ CMS默认启动的回收线程数=(CPU数+3)/4。
 
 由于基于”标记-清除”算法实现的收集器，收集结束时会产生大量的空间碎片。不过，CMS收集器提供了一个-**XX:+UseCMSCompactAtFullCollection**开关参数（默认开启），用于在CMS收集器顶不住要进行FullGC时开启内存碎片的合并整理过程。合并的过程是无法并发的。
 
-![CMS收集器](/imgs/jvm/jvm-13.png)
+![CMS收集器](../../imgs/jvm/jvm-13.png)
 
 ## CMS运作过程：
 1.  初始标记(CMS initial mark)  
@@ -352,7 +352,7 @@ G1和CMS的关注点都是降低停顿时间。
 
     注意：可以并行进行，提高收集效率，降低停顿时间，并增加吞吐量。
 
-![G1收集器](/imgs/jvm/jvm-14.png)
+![G1收集器](../../imgs/jvm/jvm-14.png)
 
 ### G1收集器应用场景
 
@@ -361,7 +361,7 @@ G1和CMS的关注点都是降低停顿时间。
 
 # <a id="MEMORY-ALLOCATION-STRATEGY">内存分配与回收策略</a>
 
-![](/imgs/jvm/jvm-15.png)
+![](../../imgs/jvm/jvm-15.png)
 
 
 ## 内存分配
@@ -417,7 +417,7 @@ JVM为了更好适应不同程序，不是永远要求等到MaxTenuringThreshold
 
 当Survivor空间不够用时，需要依赖其他内存（老年代）进行分配担保。
 
-![](/imgs/jvm/jvm-16.png)
+![](../../imgs/jvm/jvm-16.png)
 
 # <a id="CLASS-FILE-STRUCTURE">类文件结构</a>
 
@@ -477,7 +477,7 @@ Class文件中由这三项数据来确定这个类的继承关系。
 
 其中，加载、验证、准备、初始化和卸载这5个阶段的顺序是 **确定** 的。但是，解析阶段则不一定：解析阶段在某些情况下，可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定。
 
-![](/imgs/jvm/jvm-17.png)
+![](../../imgs/jvm/jvm-17.png)
 
 ## 什么情况下需要开始类加载过程的第一个阶段：加载？
 
@@ -643,7 +643,7 @@ C表示类。
 
 -   静态语句块只能访问到定义在静态语句块之前的变量。定义在静态语句块之后的变量，在前面的静态语句块中可以定义。
 
-    ![](/imgs/jvm/jvm-18.png)
+    ![](../../imgs/jvm/jvm-18.png)
 
 -	虚拟机会保证在子类的 `<clinit>` ()方法执行之前，父类的 `<clinit>` ()方法已经执行完毕。这就意味着父类的静态语句块要优先于子类的静态语句块。
 
@@ -674,7 +674,7 @@ C表示类。
 
 ###	双亲委派模式的工作过程
 
-![](/imgs/jvm/jvm-19.png)
+![](../../imgs/jvm/jvm-19.png)
  
 如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此。因此所有的加载请求最终都应该委派到顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求时，子加载器才会尝试自己加载。
  
@@ -682,7 +682,7 @@ C表示类。
 
 实现双亲委派的代码都集中在java.lang.ClassLoader的loadClass()方法中。
 
-![](/imgs/jvm/jvm-20.png)
+![](../../imgs/jvm/jvm-20.png)
  
 双亲委派模型的好处：
 1.	每个类都只会被加载一次，避免了重复加载，这样也不会出现
@@ -692,4 +692,4 @@ C表示类。
 
 ContextClassLoader：有些时候ClassLoader的双亲委托机制不能完成一些特定的类加载任务，比如java提供一些SPI，由厂商来进行具体的实现，比如jdbc，各个数据库厂商根据java提供的SPI来实现各自数据库的连接；这些SPI都定义在核心类里，由bootstrap ClassLoader加载，而在SPI 接口中的代码经常需要加载具体的实现类，但厂商的具体实现又不能由Bootstrap ClassLoader加载，这个时候就需要ContextClassLoader。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

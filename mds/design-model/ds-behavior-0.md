@@ -5,12 +5,12 @@
 通过模板方法，子类可以重新定义算法的某些步骤，而不用改变算法的结构。
 
 ### 类图
-![](/imgs/summary/ds-xw-1-1.png)  
+![](../../imgs/summary/ds-xw-1-1.png)  
 
 ### 实现
 冲咖啡和冲茶都有类似的流程，但是某些步骤会有点不一样，要求复用那些相同步骤的代码。
 
-![](/imgs/summary/ds-xw-1-2.png)
+![](../../imgs/summary/ds-xw-1-2.png)
 
 ```java
 public abstract class CaffeineBeverage {
@@ -97,7 +97,7 @@ protected Resource[] getConfigResources() {
 
 以ClassPathXmlApplicationContext为例，看一下其继承关系。
 
-![](/imgs/summary/ds-xw-1-3.png)
+![](../../imgs/summary/ds-xw-1-3.png)
 
 AbstractXmlApplicationContext是ClassPathXmlApplicationContext的基类。
 
@@ -113,6 +113,6 @@ protected Resource[] getConfigResources() {
 
 最后看一下ClassPathXmlApplicationContext中getConfigResources的方法调用栈。
 
-![](/imgs/summary/ds-xw-1-4.png)
+![](../../imgs/summary/ds-xw-1-4.png)
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)

@@ -1,6 +1,6 @@
 # Spring MVC 的工作流程介绍
 
-![](/imgs/summary/sp-6-1.png)
+![](../../imgs/summary/sp-6-1.png)
 
 1.  用户请求页面或者提交表单时，请求会发送到 DispatcherServlet。DispatcherServlet 决定了请求下一站的去向。
 
@@ -16,4 +16,4 @@
 
 7.  最后视图将通过响应对象传递给客户端。
 
-##  [BACK](/mds/summary.md)
+##  [BACK](../../mds/summary.md)
