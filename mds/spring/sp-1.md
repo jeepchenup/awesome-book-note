@@ -8,6 +8,7 @@
 - **FactoryBean**是让IoC容器中的Bean能够更加简单的生成出来。FactoryBean是一个工厂用来创建和返回指定Bean对象。
     
     FactoryBean code
+
     ```java
     org.springframework.beans.factory.FactoryBean<T>
     org.springframework.beans.factory.FactoryBean.getObject()
@@ -16,6 +17,7 @@
     ```
 
     - FactoryBean Usage Example
+
     ```java
     package com.wfms.spring.selftest;
 
@@ -130,6 +132,7 @@
     ```
 
     `factorybean-bean.xml`
+
     ```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
