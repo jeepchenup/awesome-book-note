@@ -17,6 +17,7 @@
     <li>Web 中的 Spring
         <ul>
             <li><a href="#spring-5">Chapter 5</a></li>
+            <li><a href="#spring-6">Chapter 6</a></li>
         </ul>
     </li>
 </ul>
@@ -416,5 +417,9 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 这章主要就是通过 annotation 来快速的搭建 Spring MVC。这里server 我选用 tomcat。
 
 同时，书中选用了测试 Spring MVC 的框架 - [mockito](https://site.mockito.org/)
+
+## <a id="spring-6">6. 渲染 Web 视图</a>
+
+
 
 ##  [BACK](../../mds/summary.md)
