@@ -18,6 +18,7 @@
         <ul>
             <li><a href="#spring-5">Chapter 5</a></li>
             <li><a href="#spring-6">Chapter 6</a></li>
+            <li><a href="#spring-7">Chapter 7</a></li>
         </ul>
     </li>
 </ul>
@@ -420,6 +421,48 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
 
 ## <a id="spring-6">6. 渲染 Web 视图</a>
 
+这章主要是介绍了两种 Spring 支持的视图模板：
 
+1.  Tiles
+1.  Thymeleaf
+
+## <a id="spring-7">7. Spring MVC 的高级技术</a>
+
+1.  介绍了通过 web.xml 配置 Spring MVC。这里貌似缺了一下源码，我打算重新建一个项目来简单的演示一下，如何配置 web.xml 文件。
+
+1.  介绍了利用 Spring 上传文件的两种方式：
+    1.  StandardServletMultipartResolver（推荐）
+    1.  CommonsMultipartResolver
+
+    > 文件上传的路径需要提前创建好文件夹，不然会抛出异常。
+
+1.  如何利用 Spring 处理异常
+
+    @ExceptionHandler，处理一种异常，而且只作用于同一个 Controller 中。
+    
+    如果想要 @ExceptionHandler 应用于所有 Controller 中，那么需要配合 @ControllerAdvice
+
+    ```java
+    @ControllerAdvice
+    public class AppWideExceptionHandler {
+
+        @ExceptionHandler(DuplicateSpittleException.class)
+        public String handleDuplicateSpittle() {
+            return "redirect:/error/duplicate";
+        }
+    }
+    ```
+
+1.  利用 Spring 来实现重定向功能。
+
+    重定向带来的问题：重定向之后原来模型数据都会消亡。
+
+    解决方法：
+
+    1.  使用 URL 模板以路径变量或查询参数的形式传递数据
+
+    1.  通过 flash 属性发送数据（将数据存储在 session 中）
+
+    重定向其实是2个请求。
 
 ##  [BACK](../../mds/summary.md)
