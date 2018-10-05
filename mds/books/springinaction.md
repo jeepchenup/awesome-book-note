@@ -19,6 +19,8 @@
             <li><a href="#spring-5">Chapter 5</a></li>
             <li><a href="#spring-6">Chapter 6</a></li>
             <li><a href="#spring-7">Chapter 7</a></li>
+            <li><a href="#spring-8">Chapter 8</a></li>
+            <li><a href="#spring-9">Chapter 9</a></li>
         </ul>
     </li>
 </ul>
@@ -464,5 +466,30 @@ public Teacher(@Value("${name}") String name, @Value("${sex}") String sex) {
     1.  通过 flash 属性发送数据（将数据存储在 session 中）
 
     重定向其实是2个请求。
+
+## <a id="spring-8">8. Spring Web Flow</a>
+
+在 Spring Web Flow 中，流程主要由 3 个元素定义：
+
+1.  状态
+
+    | 状态类型 | 作用 |
+    |:-:|:-:|
+    | 行为（Action）|行为状态是流程逻辑发生的地方|
+    |决策（Decision）|决策状态将流程分成两个方向，它会基于流程数据的评估结果确定流程方向|
+    |结束（End）|结束状态是流程的最后一站。一旦进入End状态，流程就会终止|
+    |子流程（Subflow）|子流程状态会在当前正在运行的流程上下文中启动一个新的流程|
+    |视图（View）|视图状态会暂停流程并邀请用户参与流程|
+1.  转移
+1.  流程数据
+
+## <a id="spring-9">9. Spring Security 简介</a>
+
+-   Spring Security 是一种基于 Spring AOP 和 Servlet 规范中的 Filter 实现的安全框架。
+
+-   Spring Security从两个角度来解决安全性问题。
+
+    1.  使用 Servlet 规范中的 Filter 保护 Web 请求并限制 URL 级别的访问。
+    1.  使用 Spring AOP 保护方法调用——借助于对象代理和使用通知，能够确保只有具备适当权限的用户才能访问安全保护的方法。
 
 ##  [BACK](../../mds/summary.md)
