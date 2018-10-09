@@ -5,9 +5,9 @@
 - 都在同一个包下`org.springframework.beans.factory`。
 
 异：
-- **FactoryBean**是让IoC容器中的Bean能够更加简单的生成出来。FactoryBean是一个工厂用来创建和返回指定Bean对象。
+- **FactoryBean** 是让 IoC 容器中的 Bean 能够更加简单的生成出来。FactoryBean 是一个工厂用来创建和返回指定 Bean 对象。
     
-    FactoryBean code
+    1.  FactoryBean code
 
     ```java
     org.springframework.beans.factory.FactoryBean<T>
@@ -16,7 +16,9 @@
     org.springframework.beans.factory.FactoryBean.isSingleton()
     ```
 
-    - FactoryBean Usage Example
+    2. FactoryBean Usage Example
+
+    首先创建 FactoryBean 的实现类 - ToolFactory。ToolFactory 是用来生产 Tool 实例对象。
 
     ```java
     package com.wfms.spring.selftest;
@@ -40,7 +42,7 @@
 
         @Override
         public boolean isSingleton() {
-            return false;
+            return true;
         }
 
         public int getFactoryId() {
@@ -80,7 +82,27 @@
         }
         
     }
+    ```
 
+    `factorybean-bean.xml` 通过 xml 文件格式来装配 bean。
+
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+        <bean id="tool" class="com.wfms.spring.selftest.ToolFactory">
+            <property name="factoryId" value="9090"/>
+            <property name="toolId" value="1"/>
+        </bean>
+    </beans>
+    ```
+
+    测试代码如下：
+
+    ```java
     //Test
     package com.wfms.spring.selftest;
 
@@ -128,29 +150,19 @@
             assertNotNull(toolFactory);
         }
     }
-
     ```
 
-    `factorybean-bean.xml`
+    这里的 ClassPathXmlApplicationContext 实际上是 BeanFactory 接口的一个实现类。
 
-    ```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    ![](../../imgs/summary/sp-1-1.png)
 
-
-        <bean id="tool" class="com.wfms.spring.selftest.ToolFactory">
-            <property name="factoryId" value="9090"/>
-            <property name="toolId" value="1"/>
-        </bean>
-    </beans>
-    ```
-
-- **BeanFactory**是IoC最基本的容器，可以通过IoC容器来生产和管理Bean。为其他的IoC容器提供了最基本的规范。
+- **BeanFactory** 是 IoC 最基本的容器，可以通过 IoC 容器来生产和管理 Bean，为其他的 IoC 容器提供了最基本的规范。
 
 #### 总结
-在大多数情况下，我们不会直接使用或实现BeanFactory接口，除非你正在扩展框架的核心功能。当你有需要Spring管理的工厂创建的对象时，你就需要实现FactoryBean。更简洁地说，BeanFactory表示Spring容器，FactoryBean表示工厂类，其创建的对象被获取并作为容器中的bean注册。
+
+![](../../imgs/summary/sp-1-2.png)
+
+在大多数情况下，我们不会直接使用或实现 BeanFactory 接口，除非你正在扩展框架的核心功能。当你有需要 Spring 管理的工厂创建的对象时，你就需要实现 FactoryBean。更简洁地说，BeanFactory 表示Spring 容器，FactoryBean 表示工厂类，其创建的对象被获取并作为容器中的bean注册。
 
 参考： 
 [geekAbyte](http://www.geekabyte.io/2014/11/difference-between-beanfactory-and.html)
