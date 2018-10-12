@@ -85,3 +85,76 @@ public class SpringBootApp {
 1.  @Bean 将 DefaultStormtrooperDao 对象作为 StormtrooperDao 的实例注册进去。
 
 1.  `main` 静态方法用来启动 Spring 应用。
+
+## Spring Controller
+
+接下来，我们来实现 REST 端或者是一个 Controller。
+
+```java
+@RestController
+@RequestMapping("/troopers")
+public class StormtroooperController {
+ 
+    private final StormtrooperDao trooperDao;
+ 
+    @Autowired
+    public StormtrooperController(StormtrooperDao trooperDao) {
+        this.trooperDao = trooperDao;
+    }
+ 
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public Stormtrooper getTrooper(@PathVariable("id") String id) throws NotFoundException {
+ 
+        Stormtrooper stormtrooper = trooperDao.getStormtrooper(id);
+        if (stormtrooper == null) {
+            throw new NotFoundException();
+        }
+        return stormtrooper;
+    }
+ 
+    @RequestMapping(method = RequestMethod.POST)
+    public Stormtrooper createTrooper(@RequestBody Stormtrooper trooper) {
+        return trooperDao.addStormtrooper(trooper);
+    }
+ 
+    @RequestMapping(path = "/{id}", method = RequestMethod.POST)
+    public Stormtrooper updateTrooper(@PathVariable("id") String id, @RequestBody Stormtrooper updatedTrooper) throws NotFoundException {
+        return trooperDao.updateStormtrooper(id, updatedTrooper);
+    }
+ 
+ 
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteTrooper(@PathVariable("id") String id) {
+        trooperDao.deleteStormtrooper(id);
+    }
+ 
+    @RequestMapping(method = RequestMethod.GET)
+    public Collection<Stormtrooper> listTroopers() {
+        return trooperDao.listStormtroopers();
+    }
+}
+```
+
+下面我们逐一分析上述代码：
+
+```java
+@RestController
+@RequestMapping("/troopers")
+public class StormtroooperController {
+```
+
+对于 `@Controller` 和 `@ResponseBody` 来说，`@RestController` 是一个方便的注解。被 `@RequestMapping` 修饰的类在 classpath 扫描期间会被标记为 web 组件。类级别的 `@RequestMapping` 用来定义该类任意 RequestMapping 的基础映射。在本例中，本类所有的端点开始的 URL 地址是 `/troopers`。
+
+```java
+@RequestMapping(path = "/{id}", method = RequestMethod.POST)
+public Stormtrooper updateTrooper(@PathVariable("id") String id, @RequestBody Stormtrooper updatedTrooper) throws NotFoundException {
+    return trooperDao.updateStormtrooper(id, updatedTrooper);
+}
+```
+
+`@RequestMapping` 注解有很多选择，这里只是使用其中的一部分功能：
+
+-   `@PathVariable("id")` 对应着 `path = "/{id}"`。将给定的方法参数传递到 URL 路径的 `{id}` 部分 - 示例 URL: `/troopers/FN-2187`。
+-   `method=RequestMethod.GET` 指定请求方式为 get
+-   `value = HttpStatus.NO_CONTENT` 设置了预期 HTTP 响应状态码为 204。
