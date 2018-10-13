@@ -11,7 +11,7 @@ awsome-book-note includes reading notes and source code analysis. The main purpo
 
 #### Notes
 
-- [Source Notes](/mds/summary.md)
+- [Source Code Analysis Notes](/mds/summary.md)
 
 - [IDE Usage Notes](/mds/ides.md)
 
