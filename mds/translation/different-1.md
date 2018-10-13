@@ -158,3 +158,71 @@ public Stormtrooper updateTrooper(@PathVariable("id") String id, @RequestBody St
 -   `@PathVariable("id")` 对应着 `path = "/{id}"`。将给定的方法参数传递到 URL 路径的 `{id}` 部分 - 示例 URL: `/troopers/FN-2187`。
 -   `method=RequestMethod.GET` 指定请求方式为 get
 -   `value = HttpStatus.NO_CONTENT` 设置了预期 HTTP 响应状态码为 204。
+
+HTTP 请求传递过来的参数将被反序列化后，再传递到用 `@RequestBody` 注解的方法参数。返回值 `return trooperDao.updateStormtrooper(id, updatedTrooper);` 是直接通过 `@RquestBody` 注解（或简单实用 `@RestController`）序列化结果，接着响应到 HTTP 上面。`@RquestBody` 和 `@RestController` 将绕过任何 MVC 模板。
+
+```java
+@RequestMapping(path = "/{id}", method = RequestMethod.POST)
+public Stormtrooper updateTrooper(@PathVariable("id") String id, @RequestBody Stormtrooper updatedTrooper) throws NotFoundException {
+    return trooperDao.updateStormtrooper(id, updatedTrooper);
+}
+```
+
+在代码块中，`updateTrooper()` 这个方法支持来自 `/trooper/{id}` 发出的 POST HTTP 请求，并包括一个序列化的 `Stormtrooper(JSON)`。如果请求路径是 `/troopers/FN-2187`，那么 POST 请求路径中 id 部分的值就是 `FN-2187` 并且传递给方法中的 id 参数。最后将一个更新后的 `Stormtrooper` 对象返回，并且将其序列化到 HTTP 相应中。
+
+## Run the Spring Example
+
+要运行这个例子，请先获取[资源](https://github.com/stormpath/jaxrs-spring-blog-example)，并且改变 Spring boot 的目录，运行 `mvn spring-boot:run` 指定启动应用，最后向服务器发送请求。
+
+>   拿到所有 Stormtrooper 的集合
+
+```txt
+$ curl http://localhost:8080/troopers
+ 
+HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Date: Tue, 08 Nov 2016 20:33:36 GMT
+Transfer-Encoding: chunked
+X-Application-Context: application
+ 
+[
+    {
+        "id": "FN-2187",
+        "planetOfOrigin": "Unknown",
+        "species": "Human",
+        "type": "Basic"
+    },
+    {
+        "id": "FN-0984",
+        "planetOfOrigin": "Coruscant",
+        "species": "Human",
+        "type": "Aquatic"
+    },
+    {
+        "id": "FN-1253",
+        "planetOfOrigin": "Tatooine",
+        "species": "Unidentified",
+        "type": "Sand"
+    },
+    ...
+] 
+```
+
+根据 id 获取对应的 Stormtrooper 的对象。
+
+```txt
+$ curl http://localhost:8080/troopers/FN-2187
+ 
+HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Date: Tue, 08 Nov 2016 20:38:53 GMT
+Transfer-Encoding: chunked
+X-Application-Context: application
+ 
+{
+    "id": "FN-2187",
+    "planetOfOrigin": "Unknown",
+    "species": "Human",
+    "type": "Basic"
+}
+```
