@@ -32,7 +32,7 @@
     -   [Spring IoC 的理解](../mds/spring/sp-3.md)
     -   [Spring IoC 的初始化过程](../mds/spring/sp-4.md)
     -   [Spring 如何保证 Controller 并发的安全性？](../mds/spring/sp-5.md)
-    -   [Spring AOP 术语](https://github.com/jeepchenup/awsome-book-note/blob/master../mds/books/springinaction.md#spring-4-1)
+    -   [Spring AOP 术语](https://github.com/jeepchenup/awsome-book-note/blob/master/mds/books/springinaction.md#spring-4-1)
     -   [Spring MVC 的工作流程介绍](../mds/spring/sp-6.md)
 
 #   设计模式
