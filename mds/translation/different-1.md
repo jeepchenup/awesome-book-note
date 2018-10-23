@@ -427,4 +427,4 @@ public class JerseyConfig extends ResourceConfig {
 
 ![](../../imgs/translations/t-1-1.png)
 
-##  [BACK](../../mds/summary.md)
+##  [BACK](../../mds/translations.md)
