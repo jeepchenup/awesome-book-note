@@ -2,7 +2,7 @@
 -   ## 泛型
     - [理解<? extends T>和<? super T>](../mds/java-base/jb-1.md)(转)
 
--   ## 容器
+-   ## 集合
     -   [ConcurrentHashMap](../mds/concurrency/c-1.md)
     -   [HashMap](../mds/concurrency/c-2.md)
     -   [Collections.sort](../mds/java-base/jb-2.md)
@@ -24,6 +24,7 @@
 -   ## 反射
 
     -   [用 Class.forName 与用 ClassLoad 加载类之间有什么区别？](../mds/reflect/reflect-1.md)
+    -   [深入理解类加载器](../mds/reflect/reflect-2.md)
 
 #   框架
 -   ## Spring
