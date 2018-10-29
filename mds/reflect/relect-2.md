@@ -6,7 +6,8 @@
 -   [2. 类加载器简介](#r-2)
 -   [3. 双亲委派模式](#r-3)
     -   [3.1 双亲委派模式概念以及原理](#r-3-1)
-    -   [3.2 sun.misc.Launcher 介绍](#r-3-2)
+    -   [3.2 ClassLoader 解析](#r-3-2)
+    -   [3.3 sun.misc.Launcher 介绍](#r-3-3)
 
 ---
 
@@ -105,7 +106,90 @@ JVM 提供了 3 种类加载器：
 
 双亲委派模式过程如下：如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是将这个请求委派给父类加载器去完成，每一层次的类加载器都是如此。因此所有的加载请求最终都应该委派到顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求时，子类加载器才会去尝试自己加载。
 
-### <a id="r-3-2">3.2 sun.misc.Launcher 介绍</a>
+### <a id="r-3-2">3.2 ClassLoader 解析</a>
+
+ClassLoader 跟双亲委派模式有着密不可分的关系。除了 BootStrapClassLoader 是由 C++ 代码实现的，其余的所有类加载器都是继承自 ClassLoader 这个抽象类，包括 ExtClassLoader 和 AppClassLoader。
+
+![](../../imgs/reflect/reflect-2-2.png)
+
+ClassLoader 作为类加载器的父类（除了 BootStrapClassLoader）为我们提供了很多有用的方法，下面通过这 4 个常用的方法来了解 ClassLoader 内部构造。
+
+1.  [loadClass](#r-3-2-1)
+
+1.  [findClass](#r-3-2-2)
+
+1.  [resolveClass](#r-3-2-3)
+
+1.  [defineClass](#r-3-2-4)
+
+#### <a id="r-3-2-1">3.2.1 loadClass</a>
+
+loadClass(String)
+
+```java
+public Class<?> loadClass(String name) throws ClassNotFoundException {
+    return loadClass(name, false);
+}
+```
+
+其内部其实调用了 loadClass(String, boolean)。
+
+```java
+protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    synchronized (getClassLoadingLock(name)) {
+        // 从缓存中查找看看，当前这个全限定名对应的类是否已经被加载进来
+        Class c = findLoadedClass(name);
+        if (c == null) { // 类还未被加载
+            long t0 = System.nanoTime();
+            try {
+                // 如果有父类加载器，就委派给父类加载器加载
+                if (parent != null) {
+                    // 这里是一个递归调用
+                    c = parent.loadClass(name, false);
+                } else {
+                    // 父类不存在，就用 BootStrapClassLoader 加载
+                    c = findBootstrapClassOrNull(name);
+                }
+            } catch (ClassNotFoundException e) {
+            }
+
+            if (c == null) {// 父类加载失败，子类自己加载
+                
+                long t1 = System.nanoTime();
+
+                // findClass 是抽象方法，需要子类自己实现
+                c = findClass(name);
+
+                // this is the defining class loader; record the stats
+                sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);
+                sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);
+                sun.misc.PerfCounter.getFindClasses().increment();
+            }
+        }
+        if (resolve) {
+            // 解析这个类
+            resolveClass(c);
+        }
+        return c;
+    }
+}
+```
+
+通过 loadClass(String) 这个方法在一定程度上解释了第一节 - 类加载机制的内容。
+
+让我们来回顾一下，加载阶段做的 3 件事情：
+
+1.  通过一个类的全限定名来获取此类的二进制字节流；
+1.  将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；
+1.  为这个类在内存中创建一个 java.lang.Class 对象，作为方法区该类的数据访问入口。
+
+在上面的 `loadClass(String, boolean)` 中可以验证其中的 1,3点。无论是 loadClass 方法还是 findClass 方法，它们返回的数据类型都是 `java.lang.Class` 的对象。
+
+除此之外，可以清晰的看到，类加载的模式即双亲委派模式，是通过下面步骤实现的：
+
+![](../../imgs/reflect/reflect-2-3.svg)
+
+### <a id="r-3-3">3.3 sun.misc.Launcher 介绍</a>
 
 Launcher 只是一个封装了虚拟机的执行外壳，由它负责装载 JRE 环境和 windows 平台下的 `jvm.dll` 动态链接库。简单来讲，Launcher 就是 Java 程序的入口。
 
@@ -119,6 +203,7 @@ Launcher 只是一个封装了虚拟机的执行外壳，由它负责装载 JRE 
 
 ```java
 public class Launcher {
+    private ClassLoader loader;
 
     private static Launcher launcher = new Launcher();
 
@@ -129,6 +214,7 @@ public class Launcher {
     public Launcher() {
         Launcher.ExtClassLoader var1;
         try {
+            // 获取 ExtClassLoader
             var1 = Launcher.ExtClassLoader.getExtClassLoader();
         } catch (IOException var10) {
             throw new InternalError("Could not create extension class loader");
