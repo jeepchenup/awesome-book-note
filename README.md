@@ -2,12 +2,13 @@
 
 ![](https://img.shields.io/github/forks/jeepchenup/awsome-book-note.svg) ![](	https://img.shields.io/github/stars/jeepchenup/awsome-book-note.svg) ![](https://img.shields.io/github/license/jeepchenup/awsome-book-note.svg)
 
-awsome-book-note includes reading notes and source code analysis. The main purpose is to review knowledge for myself. If you have any question about the articles, please be free to let me know. In addition, if you think it's good for you, please start or fork it. Thanks~ 
+awsome-book-note includes reading notes and source code analysis. The main purpose is to review knowledge for myself. If you have any question about the articles, please be free to let me know. In addition, if you think it's good for you, please start it. Thanks~ 
 
 #### Book List
 
-- [《深入理解Java虚拟机》](/mds/books/jvm.md)(WIP)
-- [《Spring IN ACTION FOURTH EDITION》](/mds/books/springinaction.md)(WIP)
+- [《深入理解Java虚拟机》](/mds/books/jvm.md)
+- [《Spring IN ACTION FOURTH EDITION》](/mds/books/springinaction.md)
+- [《Java 并发编程的艺术》](/mds/books/concurrency.md)
 
 #### Notes
 
