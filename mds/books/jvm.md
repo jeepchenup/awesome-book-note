@@ -9,6 +9,7 @@
     - [总结](#OOM-SUMMARY)
 - 垃圾收集器与内存分配策略
     - [垃圾收集器](../books/jvm-2.md)
+    - [探秘 Hotspot 虚拟机中的对象](../books/jvm-5.md)
     - [内存分配与回收策略](../books/jvm-3.md)
 - [类文件结构](#CLASS-FILE-STRUCTURE)
 - 虚拟机类加载机制
