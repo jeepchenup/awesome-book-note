@@ -1,7 +1,6 @@
 #   volatile 与 synchronized 锁的四种状态
 
 1.  <a id="c-1">volatile</a>
-
 1.  <a id="c-2">synchronized 锁的四种状态</a>
 
 ---
