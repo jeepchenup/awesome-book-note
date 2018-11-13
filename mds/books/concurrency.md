@@ -3,3 +3,4 @@
 1.  [volatile 与 Synchronized 锁的四种状态](../books/concurrency-1.md)
 1.  Java 内存模型
     1.  [Java 内存模型的基础](../books/concurrency-2.md)
+    1.  [volatile、synchronized 和 final 的内存语义](../books/concurrency-3.md)

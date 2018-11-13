@@ -38,7 +38,7 @@
 
 1 属于编译器重排序，2 和 3 属于处理器重排序。
 
-![](../../imgs/books/books-concurrency-3-1.png)
+![](../../imgs/books/books-concurrency-2-1.png)
 
 ### <a id="1-2-1">2.1 数据依赖</a>
 
