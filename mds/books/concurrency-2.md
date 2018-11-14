@@ -7,6 +7,7 @@
     1. [数据依赖](#1-2-1)
     1. [as-if-serial 语义](#1-2-2)
 1.  [顺序一致性模型](#1-3)
+1.  [happens-before 规则](#1-4)
 
 ---
 
@@ -69,5 +70,19 @@
 1.  一个线程中的所有操作必须按照程序的顺序来执行；
 
 1.  （不管程序是否同步）所有线程都只能看到一个单一的操作执行顺序，即在顺序一致性模型中，每个操作都必须是原子执行且操作的结果对所有的线程都立即可见。
+
+## <a id="1-4">4. happens-before 规则</a>
+
+1.  程序顺序规则：一个线程中的每个操作，happens-before 于该线程中的任意后续操作。
+
+1.  监视器锁规则：对一个锁的解锁，happens-before 于随后对这个锁的加锁。
+
+1.  volatile 变量规则：对一个 volatile 域的写，happens-before 于任意后续对这个 volatile 的读。
+
+1.  传递性：如果 A happens-before B，B happens-before C，那么 A happens-before C。
+
+1.  start() 规则：如果线程 A 执行操作 ThreadB.start()，那么 A 线程的 ThreadB.start() 操作 happens-before 于线程 B 中的任意操作。
+
+1.  join() 规则：如果线程 A 执行操作 ThreadB.join() 并成功返回，那么线程 B 中的任意操作 happens-before 于线程 A 从 ThreadB.join() 操作成功返回。
 
 ## [BACK](../books/concurrency.md)
