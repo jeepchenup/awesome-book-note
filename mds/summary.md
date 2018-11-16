@@ -41,16 +41,16 @@
 > 参考自：[javadoop](https://javadoop.com/post/design-pattern)
 
 -   创建型模式
-    -   [简单工厂](../mds/design-model/ds-create-0.md)
-    -   [工厂方法模式](../mds/design-model/ds-create-1.md)
+    -   [简单工厂](../mds/design-patterns/ds-create-0.md)
+    -   [工厂方法模式](../mds/design-patterns/ds-create-1.md)
     -   [抽象工厂模式](#user-content-ds-2)
-    -   [单例模式](../mds/design-model/ds-create-3.md)
+    -   [单例模式](../mds/design-patterns/ds-create-3.md)
     -   [建造者模式](#user-content-ds-4)
     -   [原型模式](#user-content-ds-5)
 -   结构型模式
-    -   [代理模式](../mds/design-model/ds-structure-0.md)
+    -   [代理模式](../mds/design-patterns/ds-structure-0.md)
 -   行为型模式
-    -   [模板方法](../mds/design-model/ds-behavior-0.md)
+    -   [模板方法](../mds/design-patterns/ds-behavior-0.md)
 
 
 <h2 align="center"><a id="backToHome" href="/awsome-book-note">Back to Home</a></h2>
