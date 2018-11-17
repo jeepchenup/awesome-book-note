@@ -226,6 +226,22 @@ public class SingletonSerializedTest implements Serializable {
 
 结果：测试未通过
 
+那么，有什么方法可以解决反序列化时对象重新创建？
+
+来看下，`java.io.Serializable` 中的注释，如下：
+
+> ANY-ACCESS-MODIFIER Object writeReplace() throws ObjectStreamException;
+
+> This writeReplace method is invoked by serialization if the method exists and it would be accessible from a method defined within the class of the object being serialized. Thus, the method can have private, protected and package-private access. Subclass access to this method follows java accessibility rules.   
+
+> ANY-ACCESS-MODIFIER Object readResolve() throws ObjectStreamException;    
+
+>This readResolve method follows the same invocation rules and accessibility rules as writeReplace.  
+
+从上面的注释可以看出，如果实现了序列化接口的类同时也实现了 writeReplace() 或 readResolve() 这两个方法中的一个，那么在序列化和反序列化的时候就会调用 writeReplace() 和 readResolve() 这两个方法。
+
+了解过 readResolve() 方法之后，我们稍微改一下 SingletonSerialized 类的构造。
+
 ```java
 public class SingletonSerialized implements Serializable {
 
@@ -247,5 +263,7 @@ public class SingletonSerialized implements Serializable {
 	}
 }
 ```
+
+最后，重新执行 SingletonSerializedTest 中的测试方法，结果 work as expected。
 
 ##  [BACK](../../mds/summary.md)
